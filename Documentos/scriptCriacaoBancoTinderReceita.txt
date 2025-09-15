@@ -1,0 +1,125 @@
+SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
+SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
+SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION';
+
+-- -----------------------------------------------------
+-- Schema matchdereceitas
+-- -----------------------------------------------------
+
+-- -----------------------------------------------------
+-- Schema matchdereceitas
+-- -----------------------------------------------------
+CREATE SCHEMA IF NOT EXISTS `matchdereceitas` DEFAULT CHARACTER SET utf8 ;
+USE `matchdereceitas` ;
+
+-- -----------------------------------------------------
+-- Table `matchdereceitas`.`usuario`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `matchdereceitas`.`usuario` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `nome` VARCHAR(100) NOT NULL,
+  `email` VARCHAR(100) NOT NULL,
+  `senha` VARCHAR(200) NOT NULL,
+  `foto_perfil` MEDIUMBLOB NULL,
+  `data_cadastro` TIMESTAMP DEFAULT CURRENT_TIMESTAMP NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE INDEX `email_UNIQUE` (`email` ASC) VISIBLE)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `matchdereceitas`.`tipo_receita`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `matchdereceitas`.`tipo_receita` (
+  `id` INT NOT NULL,
+  `descricao` VARCHAR(45) NOT NULL,
+  PRIMARY KEY (`id`))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `matchdereceitas`.`receita`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `matchdereceitas`.`receita` (
+  `id` INT NOT NULL,
+  `usuario_id` INT NOT NULL,
+  `id_tipo_receita` INT NOT NULL,
+  `titulo` VARCHAR(100) NOT NULL,
+  `descricao` VARCHAR(45) NOT NULL,
+  `imagem` BLOB NULL,
+  `tempo_preparo` VARCHAR(45) NULL,
+  `data_criacao` TIMESTAMP DEFAULT CURRENT_TIMESTAMP NULL,
+  PRIMARY KEY (`id`),
+  INDEX `fk_usuario_id_idx` (`usuario_id` ASC) VISIBLE,
+  INDEX `fk_tipo_receita_idx` (`id_tipo_receita` ASC) VISIBLE,
+  CONSTRAINT `fk_usuario_id`
+    FOREIGN KEY (`usuario_id`)
+    REFERENCES `matchdereceitas`.`usuario` (`id`)
+    ON DELETE CASCADE
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_tipo_receita`
+    FOREIGN KEY (`id_tipo_receita`)
+    REFERENCES `matchdereceitas`.`tipo_receita` (`id`)
+    ON DELETE RESTRICT
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `matchdereceitas`.`ingrediente`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `matchdereceitas`.`ingrediente` (
+  `id` INT NOT NULL,
+  `nome` VARCHAR(100) NOT NULL,
+  PRIMARY KEY (`id`))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `matchdereceitas`.`receita_ingrediente`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `matchdereceitas`.`receita_ingrediente` (
+  `id_receita` INT NOT NULL,
+  `id_ingrediente` INT NOT NULL,
+  `quantidade` VARCHAR(100) NULL,
+  PRIMARY KEY (`id_receita`, `id_ingrediente`),
+  INDEX `fk_ingrediente_id_idx` (`id_ingrediente` ASC) VISIBLE,
+  CONSTRAINT `fk_receita_id`
+    FOREIGN KEY (`id_receita`)
+    REFERENCES `matchdereceitas`.`receita` (`id`)
+    ON DELETE CASCADE
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_ingrediente_id`
+    FOREIGN KEY (`id_ingrediente`)
+    REFERENCES `matchdereceitas`.`ingrediente` (`id`)
+    ON DELETE CASCADE
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `matchdereceitas`.`match`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `matchdereceitas`.`match` (
+  `id_usuario` INT NOT NULL,
+  `id_receita` INT NOT NULL,
+  `status` ENUM('like', 'deslike') NOT NULL,
+  `data_interacao` DATE NOT NULL,
+  PRIMARY KEY (`id_usuario`, `id_receita`),
+  INDEX `fk_receita_id_idx` (`id_receita` ASC) VISIBLE,
+  CONSTRAINT `fk_match_usuario_id`
+    FOREIGN KEY (`id_usuario`)
+    REFERENCES `matchdereceitas`.`usuario` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_match_receita_id`
+    FOREIGN KEY (`id_receita`)
+    REFERENCES `matchdereceitas`.`receita` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+SET SQL_MODE=@OLD_SQL_MODE;
+SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
+SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
