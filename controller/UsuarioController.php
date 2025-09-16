@@ -28,6 +28,24 @@ class UsuarioController {
         include "view/cadastroUsuario.php";
     }
 
+    public function logout(){
+        session_start();
+
+        $_SESSION = array();
+
+        $params = session_get_cookie_params();
+
+        setcookie(session_name(), '', time() - 42000,
+            $params["path"], $params["domain"],
+            $params["secure"], $params["httponly"]
+        );
+
+        session_destroy();
+
+        header("Location: index.php");
+        exit();
+    }
+
     public function validaLogin(){    
         if(isset($_POST['email']) && !empty($_POST['email']) && isset($_POST['senha']) && !empty($_POST['senha'])){
             $email = addslashes($_POST['email']);
@@ -84,7 +102,7 @@ class UsuarioController {
         if ($usuario) {
             if (password_verify($senha, $usuario->senha)) {
                 session_start();
-                $_SESSION['id_usuario'] = $usuario->id_usuario;
+                $_SESSION['id'] = $usuario->id;
                 $_SESSION['nome'] = $usuario->nome;
 
                 if (!empty($usuario->foto_perfil)) {

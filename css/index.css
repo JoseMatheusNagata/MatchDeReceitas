@@ -1,0 +1,91 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+
+}
+
+body{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    
+}
+
+header{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    padding: 20px 100px;
+    background-color: blanchedalmond;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 99;
+
+}
+
+.group-btn{
+    display: flex; 
+} 
+
+.btnLogIn{
+    background-image: linear-gradient(to right, red, green);
+    width: 10%;
+    border-radius: 30px;
+    padding: 15px;
+    color:white;
+    border: 0px;
+    outline: 0px;
+    text-align: center;
+}
+
+.btnLogout{
+    background-image: linear-gradient(to right, red, green);
+    width: 10%;
+    border-radius: 30px;
+    padding: 15px;
+    color:white;
+    border: 0px;
+    outline: 0px;
+        text-align: center;
+
+}
+
+.imgLogin{
+    border-radius: 50px;
+    width: 50px;
+    box-shadow: 0px 0px 5px #cc4141;
+}
+
+.btnNav{
+    background-image: linear-gradient(to right, red, green);
+    width: 10%;
+    border-radius: 30px;
+    padding: 15px;
+    color:white;
+    border: 0px;
+    outline: 0px;
+    text-align: center;
+
+}
+
+nav a:hover{
+    background-image: linear-gradient(to right, rgb(143, 0, 0), rgb(2, 133, 2));
+
+}
+
+.btnLogIn, .btnLogout:hover{
+    background-image: linear-gradient(to right, rgb(143, 0, 0), rgb(2, 133, 2));
+
+}
+
+.foto-perfil {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid #ccc;
+}

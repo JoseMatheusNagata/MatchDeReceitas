@@ -14,12 +14,12 @@
             <img class="imgLogin" src="./img/tinder.png" alt="">
             <h1>Bem-vindo ao Match de Receitas</h1>
             <p>De Match em receitas para poder elas na palma da mão</p>
+            <p>Não é cadastrado?</p>
         </div>
 
         <main>
         <div class="card-group">
-            <a href="index.php?action=formLogin" class="btn">Login</a>
-            <a href="index.php?action=cadastroUsuario" class="btn">Cadastrar Usuário</a>
+            <a href="index.php?action=cadastroUsuario" class="btn">Cadastre-se</a>
         </div>
       
     <footer>

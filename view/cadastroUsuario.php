@@ -15,9 +15,9 @@
                 <div class="card-top">
                     <img class="imgLogin" src="./img/tinder.png" alt="">
                 </div>
-                <header>
-                    <h1>Cadastrar Usuário</h1>
-                </header>
+            
+                <h2>Cadastrar Usuário</h2>
+                
                 
                 <div class="card-group">
                     <label>Nome:</label>
