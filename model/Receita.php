@@ -7,9 +7,9 @@ class Receita {
     public $descricao;
     public $imagem;
     public $tempo_preparo;
-    public $tempo_criacao;
+    public $data_criacao;
 
-    public function __construct($id, $usuario_id, $id_tipo_receita, $titulo, $descricao, $imagem, $tempo_preparo, $tempo_criacao) {
+    public function __construct($id, $usuario_id, $id_tipo_receita, $titulo, $descricao, $imagem, $tempo_preparo, $data_criacao) {
         $this->id = $id;
         $this->usuario_id = $usuario_id;
         $this->id_tipo_receita = $id_tipo_receita;
@@ -17,7 +17,7 @@ class Receita {
         $this->descricao = $descricao;
         $this->imagem = $imagem;
         $this->tempo_preparo = $tempo_preparo;
-        $this->tempo_criacao = $tempo_criacao;
+        $this->data_criacao = $data_criacao;
     }
 }
 ?>

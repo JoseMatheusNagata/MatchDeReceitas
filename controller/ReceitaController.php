@@ -17,11 +17,24 @@ class ReceitaController {
     }
 
 
+    public function adicionarReceita(){
+        global $pdo;
 
-   
+        $Receita = new Receita(
+            null,
+            $id_tipo_receita,
+            $titulo,
+            $descricao,
+            $imagem,
+            $tempo_preparo,
+            $tempo_criacao,
+        );
+        $this->dao->inserir($Receita);
+
+
+    }
+
 
 
 }
-
-
 ?>
