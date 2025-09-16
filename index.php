@@ -10,9 +10,10 @@ session_start();
 
 #echo "<pre>Action = " . ($_GET['action'] ?? 'home') . "</pre>";
 require_once "controller/UsuarioController.php";
+require_once "controller/ReceitaController.php";
 
 $controllerUsuario = new UsuarioController();
-
+$controllerReceita = new ReceitaController();
 
 $action = $_GET['action'] ?? 'home';
 
@@ -39,6 +40,9 @@ switch ($action) {
     case 'cadastroUsuario':
         $controllerUsuario->cadastroUsuario();
     break;    
+    case 'minhasReceitas':
+        $controllerReceita->minhasReceitas();
+        break;
     default:
         $controllerUsuario->home();
 
@@ -58,7 +62,7 @@ switch ($action) {
             <h2 class="logo"><img class="imgLogin" src="./img/tinder.png" alt=""></h2>
             <nav class="navigation">
                 <?php if (isset($_SESSION['id'])): ?>
-                    <a class="btnNav">Minhas Receitas</a>
+                    <a class="btnNav" href="index.php?action=minhasReceitas">Minhas Receitas</a>
                 <?php endif; ?>   
                 <?php if (isset($_SESSION['id'])): ?>    
                     <a class="btnNav">Meus Matches</a>
