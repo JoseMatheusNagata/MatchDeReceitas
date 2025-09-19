@@ -69,7 +69,7 @@ ENGINE = InnoDB;
 -- Table `matchdereceitas`.`ingrediente`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `matchdereceitas`.`ingrediente` (
-  `id` INT NOT NULL,
+  `id` INT NOT NULL AUTO_INCREMENT,
   `nome` VARCHAR(100) NOT NULL,
   PRIMARY KEY (`id`))
 ENGINE = InnoDB;
