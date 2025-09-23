@@ -25,44 +25,34 @@ class ReceitaDAO {
     }
 
     public function adicionarIngrediente(Ingrediente $ingrediente) {
-    if (isset($_GET['action']) && $_GET['action'] == 'adicionarIngrediente') {
-        #Verifica se o formulário foi enviado (se a requisição é POST)
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-
-            #Verifica se o campo 'nome' não está vazio
-            if (isset($_POST['nome']) && !empty($_POST['nome'])) {
+            if (isset($_GET['action']) && $_GET['action'] == 'adicionarIngrediente') {
+                #Verifica se o formulário foi enviado (se a requisição é POST)
+                if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+                #Verifica se o campo 'nome' não está vazio
+                    if (isset($_POST['nome']) && !empty($_POST['nome'])) {
             
-                #Atribui o valor de $_POST['nome'] à variável $nome
-                $nome = htmlspecialchars(strip_tags($_POST['nome']));
+                        #Atribui o valor de $_POST['nome'] à variável $nome
+                        $nome = htmlspecialchars(strip_tags($_POST['nome']));
 
-                #echo "<h1>Sucesso!</h1>";
-                #echo "<p>Nome do Ingrediente: " . $nome . "</p>";
+                        #echo "<h1>Sucesso!</h1>";
+                        #echo "<p>Nome do Ingrediente: " . $nome . "</p>";
 
-                global $pdo;
-                $ingrediente->$nome = $_POST['nome'];
-                try {
-                    $sql = "INSERT INTO ingrediente (nome) VALUES (?)";
-                    $stmt = $pdo->prepare($sql);
-                    $stmt->execute([$ingrediente->$nome,
-                ]);
-                } catch (PDOException $e) {
-                    echo "Erro ao inserir ingrediente: " . $e->getMessage();
+                        global $pdo;
+                        $ingrediente->$nome = $_POST['nome'];
+                        try {
+                            $sql = "INSERT INTO ingrediente (nome) VALUES (?)";
+                            $stmt = $pdo->prepare($sql);
+                            $stmt->execute([$ingrediente->$nome,
+                        ]);
+                        } catch (PDOException $e) {
+                        echo "Erro ao inserir ingrediente: " . $e->getMessage();
+                        }
+
+                    } else {
+                    echo "O nome do ingrediente não pode ser vazio.";
                 }
-
-            } else {
-            echo "O nome do ingrediente não pode ser vazio.";
+            }
         }
     }
-}
-
-
-
-        
-
-    }
-
-    
-
-    
 }
 ?>
