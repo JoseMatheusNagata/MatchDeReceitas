@@ -45,38 +45,37 @@
 
             <fieldset class="fieldset">
                 <legend class="legend">Ingredientes</legend>
-                
-                <div class="ingredient-row">
-                    <div class="form-group">
-                        <label for="ingrediente">Ingrediente</label>
-                        <select id="ingrediente">
-                            <option value="">Selecione um ingrediente</option>
-                            <option value="1">Farinha de Trigo</option>
-                            <option value="2">Ovo</option>
-                            <option value="3">Leite</option>
-                            <option value="4">Açúcar</option>
-                            <option value="5">Chocolate em Pó</option>
-                        </select>
+                <div id="ingredientes-container">
+                    <div class="ingredient-row">
+                        <div class="form-group">
+                            <label>Ingrediente</label>
+                            <select name="ingrediente[]" class="ingrediente-select" required>
+                                <option value="">Selecione um ingrediente</option>
+                                <?php if (isset($ingredientes)): ?>
+                                    <?php foreach ($ingredientes as $ingrediente): ?>
+                                        <option value="<?= htmlspecialchars($ingrediente['id']) ?>">
+                                            <?= htmlspecialchars($ingrediente['nome']) ?>
+                                        </option>
+                                    <?php endforeach; ?>
+                                <?php endif; ?>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Quantidade</label>
+                            <input type="text" name="quantidade[]" class="quantidade-input" placeholder="Ex: 2 xícaras" required>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label for="quantidade">Quantidade</label>
-                        <input type="text" id="quantidade" placeholder="Ex: 2 xícaras">
-                    </div>
-                    <button type="button" class="btn btn-add" onclick="adicionarIngrediente()">Adicionar</button>
                 </div>
-
+                    <button type="button" class="btn btn-add" onclick="adicionarNovaLinha()">Adicionar mais ingredientes</button>
                 <hr>
-                <strong>Ingredientes Adicionados:</strong>
-                <div id="lista-ingredientes-cadastrados" style="margin-top: 15px;">
-                    </div>
 
+                <strong>Ingredientes Adicionados na Receita:</strong>
+                <div id="lista-ingredientes-adicionados" style="margin-top: 15px;">
+                </div>
             </fieldset>
 
             <br>
             <button type="submit" class="btn submit-btn">Salvar Receita Completa</button>
-
-
-            
         </form>
         
     </div>
@@ -97,3 +96,62 @@
 
 </body>
 </html>
+
+<script>
+// Adiciona um "ouvinte" de eventos no container principal dos ingredientes.
+        // Isso é mais eficiente do que adicionar um ouvinte para cada campo individualmente.
+        document.getElementById('ingredientes-container').addEventListener('change', atualizarListaVisual);
+        document.getElementById('ingredientes-container').addEventListener('input', atualizarListaVisual);
+
+        function adicionarNovaLinha() {
+            const container = document.getElementById('ingredientes-container');
+            // Clona a primeira linha de ingrediente que serve como modelo
+            const novaLinha = container.querySelector('.ingredient-row').cloneNode(true);
+
+            // Limpa os valores dos campos clonados para que o usuário possa preencher
+            novaLinha.querySelector('select').selectedIndex = 0;
+            novaLinha.querySelector('input').value = '';
+
+            // Cria um botão de remover para a nova linha
+            const btnRemover = document.createElement('button');
+            btnRemover.type = 'button';
+            btnRemover.className = 'btn btn-remove';
+            btnRemover.innerText = 'Remover';
+            btnRemover.onclick = function() {
+                // Remove o elemento pai do botão (a div.ingredient-row)
+                this.parentElement.remove();
+                // Atualiza a lista visual após remover a linha
+                atualizarListaVisual();
+            };
+            
+            novaLinha.appendChild(btnRemover);
+            container.appendChild(novaLinha);
+        }
+
+        function atualizarListaVisual() {
+            const listaContainer = document.getElementById('lista-ingredientes-adicionados');
+            // Limpa a lista atual para recriá-la com os valores mais recentes
+            listaContainer.innerHTML = '';
+
+            // Pega todas as linhas de ingredientes que existem no formulário
+            const todasAsLinhas = document.querySelectorAll('#ingredientes-container .ingredient-row');
+
+            todasAsLinhas.forEach(linha => {
+                const select = linha.querySelector('.ingrediente-select');
+                const inputQuantidade = linha.querySelector('.quantidade-input');
+                
+                // Pega o texto do ingrediente selecionado (ex: "Farinha de Trigo")
+                const nomeIngrediente = select.options[select.selectedIndex].text;
+                // Pega o valor digitado da quantidade
+                const quantidade = inputQuantidade.value;
+
+                // Só adiciona na lista se um ingrediente foi selecionado e uma quantidade foi digitada
+                if (select.value && quantidade) {
+                    const itemDaLista = document.createElement('div');
+                    itemDaLista.textContent = `${nomeIngrediente} - ${quantidade}`; // Ex: "Farinha de Trigo - 2 xícaras"
+                    listaContainer.appendChild(itemDaLista);
+                }
+            });
+        }
+
+</script>

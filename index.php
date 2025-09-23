@@ -41,7 +41,9 @@ switch ($action) {
         $controllerUsuario->cadastroUsuario();
     break;    
     case 'minhasReceitas':
-        $controllerReceita->minhasReceitas();
+        #$controllerReceita->minhasReceitas();
+        $controllerReceita->exibirFormulario();
+
         break;
     case 'adicionarIngrediente':
         $controllerReceita->adicionarIngrediente();

@@ -13,9 +13,9 @@ class ReceitaController {
         $this->dao = new ReceitaDAO();
     }
 
-    public function minhasReceitas() {
-        include "view/minhas_receitas.php";
-    }
+    #public function minhasReceitas() {
+    #    include "view/minhas_receitas.php";
+    #}
 
 
     public function adicionarReceita(){
@@ -59,6 +59,16 @@ class ReceitaController {
                 }
             }
         }
+    }
+
+    public function exibirFormulario() {
+        global $pdo;
+
+        // Pede ao Model a lista de ingredientes
+        $ingredientes = $this->dao->getAllIngredientes();
+
+        // Carrega a View e passa os dados para ela
+        require __DIR__ . '/../view/minhas_receitas.php';
     }
 }
 ?>

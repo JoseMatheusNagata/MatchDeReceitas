@@ -54,5 +54,12 @@ class ReceitaDAO {
             }
         }
     }
+
+    public function getAllIngredientes() {
+        global $pdo;
+        $stmt = $pdo->query("SELECT id, nome FROM ingrediente ORDER BY nome ASC");
+        return $stmt->fetchAll();
+    }
+    
 }
 ?>
