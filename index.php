@@ -6,7 +6,7 @@ session_start();
 #echo '<pre style="background: #eee; padding: 10px; border: 1px solid #ccc;">';
 #var_dump($_SESSION);
 #echo '</pre>';
-
+#echo $_POST['nome'];
 
 #echo "<pre>Action = " . ($_GET['action'] ?? 'home') . "</pre>";
 require_once "controller/UsuarioController.php";
@@ -43,6 +43,10 @@ switch ($action) {
     case 'minhasReceitas':
         $controllerReceita->minhasReceitas();
         break;
+    case 'adicionarIngrediente':
+        $controllerReceita->adicionarIngrediente();
+        break; 
+     
     default:
         $controllerUsuario->home();
 
@@ -62,7 +66,7 @@ switch ($action) {
             <h2 class="logo"><img class="imgLogin" src="./img/tinder.png" alt=""></h2>
             <nav class="navigation">
                 <?php if (isset($_SESSION['id'])): ?>
-                    <a class="btnNav" href="index.php?action=minhasReceitas">Minhas Receitas</a>
+                    <a class="btnNav" href="index.php?action=minhasReceitas">Criar Receitas</a>
                 <?php endif; ?>   
                 <?php if (isset($_SESSION['id'])): ?>    
                     <a class="btnNav">Meus Matches</a>

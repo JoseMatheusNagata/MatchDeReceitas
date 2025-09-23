@@ -74,6 +74,23 @@
 
             <br>
             <button type="submit" class="btn submit-btn">Salvar Receita Completa</button>
+
+
+            
+        </form>
+        
+    </div>
+    <div class="form-container">
+        <form action="index.php?action=adicionarIngrediente" method="POST">
+            <h2>Criar Ingrediente</h2>
+
+            <div class="form-group">
+                <label >Nome:</label>
+                <input type="text" id="nome" name="nome" required>
+            </div>
+
+            <button type="submit" class="btn btn-add" >Criar Ingrediente</button>
+  
         </form>
     </div>
 
