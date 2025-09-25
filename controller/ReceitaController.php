@@ -68,7 +68,7 @@ class ReceitaController {
         $ingredientes = $this->dao->getAllIngredientes();
 
         // Carrega a View e passa os dados para ela
-        require __DIR__ . '/../view/minhas_receitas.php';
+        require __DIR__ . '/../view/criar_receitas.php';
     }
 }
 ?>
