@@ -30,10 +30,13 @@
                 <label for="id_tipo_receita">Tipo de Receita (Categoria):</label>
                 <select id="id_tipo_receita" name="id_tipo_receita" required>
                     <option value="">Selecione uma categoria</option>
-                    <option value="1">Almoço</option>
-                    <option value="2">Jantar</option>
-                    <option value="3">Sobremesa</option>
-                    <option value="4">Lanche</option>
+                    <?php if (isset($tiposReceita)): ?>
+                        <?php foreach ($tiposReceita as $tipo): ?>
+                            <option value="<?= htmlspecialchars($tipo['id']) ?>">
+                                <?= htmlspecialchars($tipo['descricao']) ?>
+                            </option>
+                        <?php endforeach; ?>
+                    <?php endif; ?>
                 </select>
             </div>
             

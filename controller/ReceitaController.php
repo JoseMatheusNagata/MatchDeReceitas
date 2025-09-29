@@ -66,9 +66,11 @@ class ReceitaController {
 
         // Pede ao Model a lista de ingredientes
         $ingredientes = $this->dao->getAllIngredientes();
-
+        // Pede ao Model a lista de tipos de receita
+        $tiposReceita = $this->dao->getAllTiposReceitas();
         // Carrega a View e passa os dados para ela
         require __DIR__ . '/../view/criar_receitas.php';
     }
+
 }
 ?>

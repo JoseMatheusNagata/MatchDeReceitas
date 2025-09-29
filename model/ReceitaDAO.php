@@ -60,6 +60,12 @@ class ReceitaDAO {
         $stmt = $pdo->query("SELECT id, nome FROM ingrediente ORDER BY nome ASC");
         return $stmt->fetchAll();
     }
+
+      public function getAllTiposReceitas() {
+        global $pdo;
+        $stmt = $pdo->query("SELECT id, descricao FROM tipo_receita ORDER BY descricao ASC");
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
     
 }
 ?>
