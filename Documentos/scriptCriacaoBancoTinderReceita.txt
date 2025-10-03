@@ -41,7 +41,7 @@ ENGINE = InnoDB;
 -- Table `matchdereceitas`.`receita`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `matchdereceitas`.`receita` (
-  `id` INT NOT NULL,
+  `id` INT NOT NULL AUTO_INCREMENT,
   `usuario_id` INT NOT NULL,
   `id_tipo_receita` INT NOT NULL,
   `titulo` VARCHAR(100) NOT NULL,

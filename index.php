@@ -40,15 +40,15 @@ switch ($action) {
     case 'cadastroUsuario':
         $controllerUsuario->cadastroUsuario();
     break;    
-    case 'minhasReceitas':
+    case 'criarReceitas':
         #$controllerReceita->minhasReceitas();
         $controllerReceita->exibirFormulario();
-
         break;
     case 'adicionarIngrediente':
         $controllerReceita->adicionarIngrediente();
         break; 
-     
+    case 'adicionarReceita':
+        $controllerReceita->adicionarReceita();
     default:
         $controllerUsuario->home();
 
@@ -68,7 +68,7 @@ switch ($action) {
             <h2 class="logo"><img class="imgLogin" src="./img/tinder.png" alt=""></h2>
             <nav class="navigation">
                 <?php if (isset($_SESSION['id'])): ?>
-                    <a class="btnNav" href="index.php?action=minhasReceitas">Criar Receitas</a>
+                    <a class="btnNav" href="index.php?action=criarReceitas">Criar Receitas</a>
                 <?php endif; ?>   
                 <?php if (isset($_SESSION['id'])): ?>    
                     <a class="btnNav">Meus Matches</a>
