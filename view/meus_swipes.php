@@ -15,38 +15,125 @@
             <div class="filter-container">
                 <label for="status">Filtrar por:</label>
                 <select name="status" id="status" onchange="this.form.submit()">
-                    <option value="" <?= ($status_filtro == '') ? 'selected' : '' ?>>Todos</option>
-                    <option value="like" <?= ($status_filtro == 'like') ? 'selected' : '' ?>>Likes</option>
-                    <option value="dislike" <?= ($status_filtro == 'dislike') ? 'selected' : '' ?>>Dislikes</option>
+                    <option value="" <?= ($status_filtro == '') ? 'selected' : '' ?>>Todas</option>
+                    <option value="like" <?= ($status_filtro == 'like') ? 'selected' : '' ?>>Curtidas</option>
+                    <option value="dislike" <?= ($status_filtro == 'dislike') ? 'selected' : '' ?>>Não Curtidas</option>
                 </select>
             </div>
         </form>
 
-        <div class="swipes-grid">
+        <div class="receitas-viewer">
             <?php if (!empty($swipes)): ?>
-                <?php foreach ($swipes as $swipe): ?>
-                    <div class="swipe-card"> 
-                        <img src="data:image/jpeg;base64,<?= base64_encode($swipe->imagem_receita) ?>" alt="Foto da Receita">
-                        <div class="card-content">
-                            <h3><?= htmlspecialchars($swipe->titulo_receita) ?></h3>
-                            <p>Status: <span class="status-<?= htmlspecialchars($swipe->status) ?>"><?= htmlspecialchars($swipe->status) ?></span></p>
+                <div id="receitas-container">
+                    <?php foreach ($swipes as $swipe): ?>
+                        <div class="receita-card"> 
+                            <img src="data:image/jpeg;base64,<?= base64_encode($swipe->imagem_receita) ?>" alt="Foto da Receita: <?= htmlspecialchars($swipe->titulo_receita) ?>">
                             
-                            <form action="index.php?action=alterarStatusSwipe" method="POST" style="margin-top: 10px;">
-                                <input type="hidden" name="id_receita" value="<?= $swipe->id_receita ?>">
-                                <input type="hidden" name="status_atual" value="<?= $swipe->status ?>">
-                                <?php
-                                    $novo_status_texto = ($swipe->status == 'like') ? 'Dislike' : 'Like';
-                                    $classe_botao = ($swipe->status == 'like') ? 'btn-dislike' : 'btn-like';
-                                ?>
-                                <button type="submit" class="btn <?= $classe_botao ?>">Mudar para <?= $novo_status_texto ?></button>
-                            </form>
+                            <div class="receita-content">
+                                <h2><?= htmlspecialchars($swipe->titulo_receita) ?></h2>
+                                
+                                <?php if (!empty($swipe->tempo_preparo_receita)): ?>
+                                    <p class="tempo-preparo"><strong>Tempo de Preparo:</strong> <?= htmlspecialchars($swipe->tempo_preparo_receita) ?></p>
+                                <?php endif; ?>
+
+                                <?php if (!empty($swipe->ingredientes)): ?>
+                                    <div class="ingredientes">
+                                        <h3>Ingredientes:</h3>
+                                        <ul>
+                                            <?php foreach ($swipe->ingredientes as $ingrediente): ?>
+                                                <li><?= htmlspecialchars($ingrediente['quantidade']) ?> de <?= htmlspecialchars($ingrediente['nome']) ?></li>
+                                            <?php endforeach; ?>
+                                        </ul>
+                                    </div>
+                                <?php endif; ?>
+
+                                <?php if (!empty($swipe->descricao_receita)): ?>
+                                    <div class="modo-preparo">
+                                        <h3>Modo de Preparo:</h3>
+                                        <p><?= nl2br(htmlspecialchars($swipe->descricao_receita)) ?></p>
+                                    </div>
+                                <?php endif; ?>
+                                
+                                <form action="index.php?action=alterarStatusSwipe" method="POST" style="margin-top: 20px;">
+                                    <input type="hidden" name="id_receita" value="<?= $swipe->id_receita ?>">
+                                    <input type="hidden" name="status_atual" value="<?= $swipe->status ?>">
+                                    <?php
+                                        $novo_status_texto = ($swipe->status == 'like') ? 'Remover das Curtidas' : 'Mover para Curtidas';
+                                        $classe_botao = ($swipe->status == 'like') ? 'btn-dislike' : 'btn-like';
+                                    ?>
+                                    <button type="submit" class="btn <?= $classe_botao ?>"><?= $novo_status_texto ?></button>
+                                </form>
+                            </div>
                         </div>
-                    </div>
-                <?php endforeach; ?>
+                    <?php endforeach; ?>
+                </div>
+
+                <div class="navigation-controls">
+                    <button id="prev-btn" class="nav-btn">Anterior</button>
+                    <span id="receita-counter"></span>
+                    <button id="next-btn" class="nav-btn">Próxima</button>
+                </div>
+
             <?php else: ?>
-                <p>Nenhum swipe encontrado.</p>
+                <p>Nenhuma receita encontrada com este filtro.</p>
             <?php endif; ?>
         </div>
     </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const receitasContainer = document.getElementById('receitas-container');
+        const receitas = receitasContainer.getElementsByClassName('receita-card');
+        const prevBtn = document.getElementById('prev-btn');
+        const nextBtn = document.getElementById('next-btn');
+        const counter = document.getElementById('receita-counter');
+
+        let receitaAtual = 0;
+
+        function mostrarReceita(index) {
+            // Esconde todas as receitas
+            for (let i = 0; i < receitas.length; i++) {
+                receitas[i].style.display = 'none';
+            }
+            // Mostra apenas a receita atual
+            if (receitas[index]) {
+                receitas[index].style.display = 'block';
+            }
+
+            // Atualiza o contador
+            counter.textContent = `Receita ${index + 1} de ${receitas.length}`;
+
+            // Habilita/desabilita botões de navegação
+            prevBtn.disabled = index === 0;
+            nextBtn.disabled = index === receitas.length - 1;
+        }
+
+        if (receitas.length > 0) {
+            prevBtn.addEventListener('click', () => {
+                if (receitaAtual > 0) {
+                    receitaAtual--;
+                    mostrarReceita(receitaAtual);
+                }
+            });
+
+            nextBtn.addEventListener('click', () => {
+                if (receitaAtual < receitas.length - 1) {
+                    receitaAtual++;
+                    mostrarReceita(receitaAtual);
+                }
+            });
+
+            // Mostra a primeira receita ao carregar a página
+            mostrarReceita(0);
+        } else {
+            // Se não houver receitas, esconde os controles
+            const navControls = document.querySelector('.navigation-controls');
+            if(navControls) {
+                navControls.style.display = 'none';
+            }
+        }
+    });
+</script>
+
 </body>
 </html>

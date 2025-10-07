@@ -7,7 +7,11 @@ class SwipeDAO {
     public function getSwipesByUsuario($id_usuario, $status_filtro = null) {
         global $pdo;
         try {
-            $sql = "SELECT s.*, r.titulo as titulo_receita, r.imagem as imagem_receita
+            $sql = "SELECT s.*, 
+                           r.titulo as titulo_receita, 
+                           r.imagem as imagem_receita,
+                           r.descricao as descricao_receita,
+                           r.tempo_preparo as tempo_preparo_receita
                     FROM `swipe` s 
                     JOIN receita r ON s.id_receita = r.id
                     WHERE s.id_usuario = :id_usuario";
@@ -24,10 +28,26 @@ class SwipeDAO {
             }
 
             $stmt->execute();
-            return $stmt->fetchAll(PDO::FETCH_CLASS, 'Swipe');
+            $swipes = $stmt->fetchAll(PDO::FETCH_CLASS, 'Swipe');
+
+            foreach ($swipes as $swipe) {
+                $sql_ingredientes = "SELECT i.nome, ri.quantidade 
+                                     FROM receita_ingrediente ri
+                                     JOIN ingrediente i ON ri.id_ingrediente = i.id
+                                     WHERE ri.id_receita = :id_receita";
+                
+                $stmt_ingredientes = $pdo->prepare($sql_ingredientes);
+                $stmt_ingredientes->bindParam(':id_receita', $swipe->id_receita, PDO::PARAM_INT);
+                $stmt_ingredientes->execute();
+                
+                // Adiciona a lista de ingredientes ao objeto swipe
+                $swipe->ingredientes = $stmt_ingredientes->fetchAll(PDO::FETCH_ASSOC);
+            }
+
+            return $swipes;
 
         } catch (PDOException $e) {
-            echo "Erro ao buscar matches: " . $e->getMessage();
+            echo "Erro ao buscar swipes: " . $e->getMessage();
             return [];
         }
     }

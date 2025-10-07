@@ -7,6 +7,9 @@ class Swipe {
     public $titulo_receita;
     public $imagem_receita;
 
-  
+    #para a tela de meus_swipe
+    public $descricao_receita;
+    public $tempo_preparo_receita;
+    public $ingredientes = [];
 }
 ?>
