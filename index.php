@@ -65,6 +65,9 @@ switch ($action) {
     case 'alterarStatusSwipe': 
         $controllerSwipe->alterarStatusSwipe();
         break;
+    case 'carregarReceitas':
+        $controllerSwipe->carregarReceitas();
+        break;
 
     default:
         $controllerUsuario->home();
