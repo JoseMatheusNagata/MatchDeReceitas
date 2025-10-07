@@ -80,6 +80,12 @@ class ReceitaController {
         // Carrega a View e passa os dados para ela
         require __DIR__ . '/../view/criar_receitas.php';
     }
+    public function carregarReceitas() {
+        global $pdo;
+        $receitas = $this->dao->getAllReceitas();
+
+        require __DIR__ . '/../view/carregar_receitas.php';
+    }
 
 }
 ?>
