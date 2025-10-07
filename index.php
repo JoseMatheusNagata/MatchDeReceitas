@@ -11,9 +11,13 @@ session_start();
 #echo "<pre>Action = " . ($_GET['action'] ?? 'home') . "</pre>";
 require_once "controller/UsuarioController.php";
 require_once "controller/ReceitaController.php";
+require_once "controller/SwipeController.php";
+
+
 
 $controllerUsuario = new UsuarioController();
 $controllerReceita = new ReceitaController();
+$controllerSwipe = new SwipeController();
 
 $action = $_GET['action'] ?? 'home';
 
@@ -21,37 +25,50 @@ switch ($action) {
     case 'principal':
         $controllerUsuario->principal();
         break;
-    case 'salvarUsuario':
-        $controllerUsuario->salvarUsuario();
-        break;
+        
     case 'formLogin':
         $controllerUsuario->login();
         break;
+
     case 'logout':
         $controllerUsuario->logout();
         break;    
 
     case 'validaLogin':
         $controllerUsuario->validaLogin();
-        break;        
+        break;  
+
     case 'salvarUsuario':
         $controllerUsuario->salvarUsuario();
         break;  
+
     case 'cadastroUsuario':
         $controllerUsuario->cadastroUsuario();
-    break;    
+        break;    
+
     case 'criarReceitas':
-        #$controllerReceita->minhasReceitas();
         $controllerReceita->exibirFormulario();
         break;
+
     case 'adicionarIngrediente':
         $controllerReceita->adicionarIngrediente();
-        break; 
+        break;
+
     case 'adicionarReceita':
         $controllerReceita->adicionarReceita();
+        break;
+
+    case 'meusSwipes':
+        $controllerSwipe->meusSwipes();
+        break;  
+
+    case 'alterarStatusSwipe': 
+        $controllerSwipe->alterarStatusSwipe();
+        break;
+
     default:
         $controllerUsuario->home();
-
+        break;
 }
 ?>
 
@@ -70,8 +87,9 @@ switch ($action) {
                 <?php if (isset($_SESSION['id'])): ?>
                     <a class="btnNav" href="index.php?action=criarReceitas">Criar Receitas</a>
                 <?php endif; ?>   
-                <?php if (isset($_SESSION['id'])): ?>    
-                    <a class="btnNav">Meus Matches</a>
+       
+                <?php if (isset($_SESSION['id'])): ?>
+                    <a class="btnNav" href="index.php?action=meusSwipes">Meus Swipes</a>
                 <?php endif; ?>
             </nav>
             
@@ -86,12 +104,8 @@ switch ($action) {
                 if (isset($_SESSION['foto_perfil']) && !empty($_SESSION['foto_perfil'])) {
                     echo '<img class="foto-perfil" src="' . $_SESSION['foto_perfil'] . '" alt="Foto de Perfil">';
                 } else {
-
             }   
             ?>
-
         </header>
-
-
     </body>
 </html>

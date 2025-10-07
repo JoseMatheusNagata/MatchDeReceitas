@@ -1,0 +1,54 @@
+<?php
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+require_once "./model/SwipeDAO.php"; 
+require_once "./model/Swipe.php";
+
+
+class SwipeController {
+
+    /**
+     * Carrega os swipes do usuario logado
+     */
+    public function meusSwipes() {
+        if (!isset($_SESSION['id'])) {
+            header("Location: index.php?action=formLogin&erro=2");
+            exit;
+        }
+
+        $swipeDAO = new SwipeDAO();
+        $status_filtro = $_GET['status'] ?? 'like'; 
+        $swipes = $swipeDAO->getSwipesByUsuario($_SESSION['id'], $status_filtro);
+
+        include "view/meus_swipes.php";
+    }
+
+
+
+    /**
+     * Altera o status de um swipe de like para dislike ou vice-versa.
+     */
+    public function alterarStatusSwipe() {
+        if (!isset($_SESSION['id'])) {
+            header("Location: index.php?action=formLogin&erro=2");
+            exit;
+        }
+
+        if (isset($_POST['id_receita']) && isset($_POST['status_atual'])) {
+            $id_receita = $_POST['id_receita'];
+            $status_atual = $_POST['status_atual'];
+            $id_usuario = $_SESSION['id'];
+
+            $novo_status = ($status_atual == 'like') ? 'dislike' : 'like';
+
+            $swipeDAO = new SwipeDAO();
+            $swipeDAO->mudarStatus($id_usuario, $id_receita, $novo_status);
+        }
+
+        header("Location: index.php?action=meusSwipes");
+        exit;
+    }
+
+}
+?>

@@ -29,7 +29,7 @@ class UsuarioController {
     }
 
     public function logout(){
-        session_start();
+        #session_start();
 
         $_SESSION = array();
 
@@ -48,8 +48,8 @@ class UsuarioController {
 
     public function validaLogin(){    
         if(isset($_POST['email']) && !empty($_POST['email']) && isset($_POST['senha']) && !empty($_POST['senha'])){
-            $email = addslashes($_POST['email']);
-            $senha = addslashes($_POST['senha']);
+            $email = $_POST['email'];
+            $senha = $_POST['senha'];
 
             if($this->dao->login($email, $senha) === true && isset($_SESSION['id'])){
                 header("Location: index.php?action=principal");
@@ -58,8 +58,10 @@ class UsuarioController {
                 header("Location: index.php?action=login&erro=1");
                 exit;
             }
-        }else{
-            header("Location: index.php?action=login.php");
+        } else {
+            // CORREÇÃO: Redirecionamento quando os campos estão vazios também estava incorreto.
+            header("Location: index.php?action=login");
+            exit;
         }
     }
 
@@ -92,33 +94,12 @@ class UsuarioController {
 
         $this->dao->inserir($Usuario);
         header("Location: index.php?action=home");
+        exit(); 
     }
 
    
 
-    public function authLogin($email, $senha) {
-        $usuario = $this->dao->buscarPorEmail($email);
-
-        if ($usuario) {
-            if (password_verify($senha, $usuario->senha)) {
-                session_start();
-                $_SESSION['id'] = $usuario->id;
-                $_SESSION['nome'] = $usuario->nome;
-
-                if (!empty($usuario->foto_perfil)) {
-                    $_SESSION['foto_perfil'] = 'data:image/jpeg;base64,' . base64_encode($usuario->foto_perfil);
-                } else {
-                    $_SESSION['foto_perfil'] = null;
-                }
-                echo "logado";
-                return true; // login bem-sucedido
-            } else {
-                return "Senha incorreta!";
-            }
-        } else {
-            return "Usuário não encontrado!";
-        }
-    }
+    
 
 }
 

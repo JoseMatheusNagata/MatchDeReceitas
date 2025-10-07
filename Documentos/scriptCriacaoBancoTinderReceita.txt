@@ -3,19 +3,19 @@ SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION';
 
 -- -----------------------------------------------------
--- Schema matchdereceitas
+-- Schema swipesdereceitas
 -- -----------------------------------------------------
 
 -- -----------------------------------------------------
--- Schema matchdereceitas
+-- Schema swipesdereceitas
 -- -----------------------------------------------------
-CREATE SCHEMA IF NOT EXISTS `matchdereceitas` DEFAULT CHARACTER SET utf8 ;
-USE `matchdereceitas` ;
+CREATE SCHEMA IF NOT EXISTS `swipesdereceitas` DEFAULT CHARACTER SET utf8 ;
+USE `swipesdereceitas` ;
 
 -- -----------------------------------------------------
--- Table `matchdereceitas`.`usuario`
+-- Table `swipesdereceitas`.`usuario`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `matchdereceitas`.`usuario` (
+CREATE TABLE IF NOT EXISTS `swipesdereceitas`.`usuario` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `nome` VARCHAR(100) NOT NULL,
   `email` VARCHAR(100) NOT NULL,
@@ -28,9 +28,9 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `matchdereceitas`.`tipo_receita`
+-- Table `swipesdereceitas`.`tipo_receita`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `matchdereceitas`.`tipo_receita` (
+CREATE TABLE IF NOT EXISTS `swipesdereceitas`.`tipo_receita` (
   `id` INT NOT NULL,
   `descricao` VARCHAR(45) NOT NULL,
   PRIMARY KEY (`id`))
@@ -38,15 +38,15 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `matchdereceitas`.`receita`
+-- Table `swipesdereceitas`.`receita`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `matchdereceitas`.`receita` (
+CREATE TABLE IF NOT EXISTS `swipesdereceitas`.`receita` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `usuario_id` INT NOT NULL,
   `id_tipo_receita` INT NOT NULL,
   `titulo` VARCHAR(100) NOT NULL,
   `descricao` VARCHAR(45) NOT NULL,
-  `imagem` BLOB NULL,
+  `imagem` MEDIUMBLOB NULL,
   `tempo_preparo` VARCHAR(45) NULL,
   `data_criacao` TIMESTAMP DEFAULT CURRENT_TIMESTAMP NULL,
   PRIMARY KEY (`id`),
@@ -54,21 +54,21 @@ CREATE TABLE IF NOT EXISTS `matchdereceitas`.`receita` (
   INDEX `fk_tipo_receita_idx` (`id_tipo_receita` ASC) VISIBLE,
   CONSTRAINT `fk_usuario_id`
     FOREIGN KEY (`usuario_id`)
-    REFERENCES `matchdereceitas`.`usuario` (`id`)
+    REFERENCES `swipesdereceitas`.`usuario` (`id`)
     ON DELETE CASCADE
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_tipo_receita`
     FOREIGN KEY (`id_tipo_receita`)
-    REFERENCES `matchdereceitas`.`tipo_receita` (`id`)
+    REFERENCES `swipesdereceitas`.`tipo_receita` (`id`)
     ON DELETE RESTRICT
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `matchdereceitas`.`ingrediente`
+-- Table `swipesdereceitas`.`ingrediente`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `matchdereceitas`.`ingrediente` (
+CREATE TABLE IF NOT EXISTS `swipesdereceitas`.`ingrediente` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `nome` VARCHAR(100) NOT NULL,
   PRIMARY KEY (`id`))
@@ -76,9 +76,9 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `matchdereceitas`.`receita_ingrediente`
+-- Table `swipesdereceitas`.`receita_ingrediente`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `matchdereceitas`.`receita_ingrediente` (
+CREATE TABLE IF NOT EXISTS `swipesdereceitas`.`receita_ingrediente` (
   `id_receita` INT NOT NULL,
   `id_ingrediente` INT NOT NULL,
   `quantidade` VARCHAR(100) NULL,
@@ -86,35 +86,35 @@ CREATE TABLE IF NOT EXISTS `matchdereceitas`.`receita_ingrediente` (
   INDEX `fk_ingrediente_id_idx` (`id_ingrediente` ASC) VISIBLE,
   CONSTRAINT `fk_receita_id`
     FOREIGN KEY (`id_receita`)
-    REFERENCES `matchdereceitas`.`receita` (`id`)
+    REFERENCES `swipesdereceitas`.`receita` (`id`)
     ON DELETE CASCADE
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_ingrediente_id`
     FOREIGN KEY (`id_ingrediente`)
-    REFERENCES `matchdereceitas`.`ingrediente` (`id`)
+    REFERENCES `swipesdereceitas`.`ingrediente` (`id`)
     ON DELETE CASCADE
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `matchdereceitas`.`match`
+-- Table `swipesdereceitas`.`swipe`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `matchdereceitas`.`match` (
+CREATE TABLE IF NOT EXISTS `swipesdereceitas`.`swipe` (
   `id_usuario` INT NOT NULL,
   `id_receita` INT NOT NULL,
-  `status` ENUM('like', 'deslike') NOT NULL,
-  `data_interacao` DATE NOT NULL,
+  `status` ENUM('like', 'dislike') NOT NULL,
+  `data_interacao` TIMESTAMP DEFAULT CURRENT_TIMESTAMP NULL,
   PRIMARY KEY (`id_usuario`, `id_receita`),
   INDEX `fk_receita_id_idx` (`id_receita` ASC) VISIBLE,
-  CONSTRAINT `fk_match_usuario_id`
+  CONSTRAINT `fk_swipe_usuario_id`
     FOREIGN KEY (`id_usuario`)
-    REFERENCES `matchdereceitas`.`usuario` (`id`)
+    REFERENCES `swipesdereceitas`.`usuario` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
-  CONSTRAINT `fk_match_receita_id`
+  CONSTRAINT `fk_swipe_receita_id`
     FOREIGN KEY (`id_receita`)
-    REFERENCES `matchdereceitas`.`receita` (`id`)
+    REFERENCES `swipesdereceitas`.`receita` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
@@ -123,3 +123,15 @@ ENGINE = InnoDB;
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
+
+
+
+INSERT INTO `swipesdereceitas`.`ingrediente` (`id`, `nome`) VALUES ('1', 'Ovos');
+INSERT INTO `swipesdereceitas`.`ingrediente` (`id`, `nome`) VALUES ('2', 'Sal');
+INSERT INTO `swipesdereceitas`.`ingrediente` (`id`, `nome`) VALUES ('3', 'Cebola');
+INSERT INTO `swipesdereceitas`.`ingrediente` (`id`, `nome`) VALUES ('4', 'Calabresa');
+
+INSERT INTO `swipesdereceitas`.`tipo_receita` (`id`, `descricao`) VALUES ('1', 'Café da Manhã');
+INSERT INTO `swipesdereceitas`.`tipo_receita` (`id`, `descricao`) VALUES ('2', 'Almoço');
+INSERT INTO `swipesdereceitas`.`tipo_receita` (`id`, `descricao`) VALUES ('3', 'Lanche');
+INSERT INTO `swipesdereceitas`.`tipo_receita` (`id`, `descricao`) VALUES ('4', 'Janta');

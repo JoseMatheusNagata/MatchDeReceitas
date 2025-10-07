@@ -54,51 +54,20 @@ class ReceitaController {
         $this->dao->inserirReceitaCompleta($receita, $ingredientes, $quantidades);
         
         // Redireciona para a mesma página (ou uma de sucesso)
-        #header("Location: index.php?action=minhasReceitas");
-        #exit();
+        header("Location: index.php?action=meusSwipes");
+        exit();
     }
     
-    
-    public function inserirIngredientesDaReceita($id_receita, array $ingredientes, array $quantidades) {
-        global $pdo;
-        $sql = "INSERT INTO receita_ingrediente (id_receita, id_ingrediente, quantidade) VALUES (?, ?, ?)";
-        $stmt = $pdo->prepare($sql);
 
-        foreach ($ingredientes as $index => $id_ingrediente) {
-            if (!empty($id_ingrediente) && isset($quantidades[$index])) {
-                $stmt->execute([
-                    $id_receita,
-                    $id_ingrediente,
-                    $quantidades[$index]
-                ]);
-            }
+
+    public function adicionarIngrediente() {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_POST['nome'])) {
+            $nome = htmlspecialchars(strip_tags($_POST['nome']));
+            $ingrediente = new Ingrediente($nome);
+            $this->dao->adicionarIngrediente($ingrediente);
         }
-    }
-
-    public function adicionarIngrediente(){
-        if (isset($_GET['action']) && $_GET['action'] == 'adicionarIngrediente') {
-        #Verifica se o formulário foi enviado (se a requisição é POST)
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-
-            #Verifica se o campo 'nome' não está vazio
-            if (isset($_POST['nome']) && !empty($_POST['nome'])) {
-            
-                #Atribui o valor de $_POST['nome'] à variável $nome
-                $nome = htmlspecialchars(strip_tags($_POST['nome']));
-
-                global $pdo;
-
-                $Ingrediente = new Ingrediente(
-                $nome,
-                );
-                $this->dao->adicionarIngrediente($Ingrediente);
-                echo "<h1>Ingrediente salvo com Sucesso!</h1>";
-                echo "<p>Nome do Ingrediente: " . $nome . "</p>";    
-                } else {
-                    echo "O nome do ingrediente não pode ser vazio.";
-                }
-            }
-        }
+        header("Location: index.php?action=criarReceitas");
+        exit();
     }
 
     public function exibirFormulario() {

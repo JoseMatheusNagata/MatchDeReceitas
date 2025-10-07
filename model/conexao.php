@@ -2,7 +2,7 @@
 $localhost = 'localhost';
 $user = "root";
 $password = "Estacio@123";
-$banco = "matchdereceitas";
+$banco = "swipesdereceitas";
 
 global $pdo;
 
