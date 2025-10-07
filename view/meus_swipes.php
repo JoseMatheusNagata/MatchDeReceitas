@@ -20,6 +20,20 @@
                     <option value="dislike" <?= ($status_filtro == 'dislike') ? 'selected' : '' ?>>Não Curtidas</option>
                 </select>
             </div>
+            <div class="filter-container">
+                <label for="id_tipo_receita">Filtrar por Categoria:</label>
+                <select name="id_tipo_receita" id="id_tipo_receita" onchange="this.form.submit()">
+                    <option value="">Todas as Categorias</option>
+                    <?php if (isset($tiposReceita)): ?>
+                        <?php foreach ($tiposReceita as $tipo): ?>
+                            <option value="<?= htmlspecialchars($tipo['id']) ?>" <?= (isset($tipo_receita_filtro) && $tipo_receita_filtro == $tipo['id']) ? 'selected' : '' ?>>
+                                <?= htmlspecialchars($tipo['descricao']) ?>
+                            </option>
+                        <?php endforeach; ?>
+                    <?php endif; ?>
+                </select>
+            </div>
+
         </form>
 
         <div class="receitas-viewer">
@@ -27,8 +41,12 @@
                 <div id="receitas-container">
                     <?php foreach ($swipes as $swipe): ?>
                         <div class="receita-card"> 
-                            <img src="data:image/jpeg;base64,<?= base64_encode($swipe->imagem_receita) ?>" alt="Foto da Receita: <?= htmlspecialchars($swipe->titulo_receita) ?>">
-                            
+                            <?php if (!empty($swipe->imagem_receita)): ?>
+                                <img src="data:image/jpeg;base64,<?= base64_encode($swipe->imagem_receita) ?>" alt="Foto da Receita: <?= htmlspecialchars($swipe->titulo_receita) ?>">
+                            <?php else: ?>
+                                <img src="img/imagem_padrao.png" alt="Imagem Padrão para <?= htmlspecialchars($swipe->titulo_receita) ?>">
+                            <?php endif; ?>
+
                             <div class="receita-content">
                                 <h2><?= htmlspecialchars($swipe->titulo_receita) ?></h2>
                                 

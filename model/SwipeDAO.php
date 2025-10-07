@@ -4,7 +4,7 @@ require_once "Swipe.php";
 
 class SwipeDAO {
 
-    public function getSwipesByUsuario($id_usuario, $status_filtro = null) {
+    public function getSwipesByUsuario($id_usuario, $status_filtro = null, $id_tipo_receita = null) {
         global $pdo;
         try {
             $sql = "SELECT s.*, 
@@ -20,11 +20,19 @@ class SwipeDAO {
                 $sql .= " AND s.status = :status";
             }
 
+            if ($id_tipo_receita) {
+                $sql .= " AND r.id_tipo_receita = :id_tipo_receita";
+            }
+
             $stmt = $pdo->prepare($sql);
             $stmt->bindParam(':id_usuario', $id_usuario, PDO::PARAM_INT);
 
             if ($status_filtro) {
                 $stmt->bindParam(':status', $status_filtro, PDO::PARAM_STR);
+            }
+
+            if ($id_tipo_receita) {
+                $stmt->bindParam(':id_tipo_receita', $id_tipo_receita, PDO::PARAM_INT);
             }
 
             $stmt->execute();

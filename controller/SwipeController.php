@@ -4,7 +4,7 @@ ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 require_once "./model/SwipeDAO.php"; 
 require_once "./model/Swipe.php";
-
+require_once "./model/ReceitaDAO.php";
 
 class SwipeController {
 
@@ -18,8 +18,15 @@ class SwipeController {
         }
 
         $swipeDAO = new SwipeDAO();
-        $status_filtro = $_GET['status'] ?? 'like'; 
-        $swipes = $swipeDAO->getSwipesByUsuario($_SESSION['id'], $status_filtro);
+        $receitaDAO = new ReceitaDAO();
+
+        $status_filtro = $_GET['status'] ?? 'like';
+
+        $tipo_receita_filtro = $_GET['id_tipo_receita'] ?? null;
+
+        $swipes = $swipeDAO->getSwipesByUsuario($_SESSION['id'], $status_filtro, $tipo_receita_filtro);
+
+        $tiposReceita = $receitaDAO->getAllTiposReceitas();
 
         include "view/meus_swipes.php";
     }
