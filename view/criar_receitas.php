@@ -7,6 +7,22 @@
     <link rel="stylesheet" href="./css/criar_receitas.css">
 </head>
 <body>
+    <div id="modal-criar-ingrediente" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="fecharModal()">&times;</span>
+            <div class="form-container" style="box-shadow: none; padding: 0;">
+                <form action="index.php?action=adicionarIngrediente" method="POST">
+                    <h2>Criar Novo Ingrediente</h2>
+                    <div class="form-group">
+                        <label>Nome do Ingrediente:</label>
+                        <input type="text" name="nome" required placeholder="Ex: Chocolate em pó">
+                    </div>
+                    <button type="submit" class="btn btn-add">Salvar Ingrediente</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
     <div class="form-container">
         <h2>Criar Nova Receita</h2>
         <form action="index.php?action=adicionarReceita" method="POST" enctype="multipart/form-data">
@@ -63,13 +79,15 @@
                         <input type="text" id="quantidade-input" class="quantidade-input" placeholder="Ex: 2 xícaras">
                     </div>
                 </div>
-                <button type="button" class="btn btn-add" onclick="adicionarIngredienteNaLista()">Adicionar Ingrediente</button>
+
+                <div class="button-group">
+                    <button type="button" class="btn btn-add" onclick="adicionarIngredienteNaLista()">Adicionar à Receita</button>
+                    <button type="button" class="btn btn-new" onclick="abrirModal()">Novo Ingrediente</button>
+                </div>
                 <hr>
 
                 <strong>Ingredientes Adicionados:</strong>
-                <div id="lista-ingredientes-adicionados" style="margin-top: 15px;">
-                    </div>
-
+                <div id="lista-ingredientes-adicionados" style="margin-top: 15px;"></div>
                 <div id="hidden-ingredientes-container"></div>
             </fieldset>
 
@@ -77,102 +95,68 @@
             <button type="submit" class="btn submit-btn">Salvar Receita Completa</button>
         </form>
     </div>
-
-    <div class="form-container">
-        <form action="index.php?action=adicionarIngrediente" method="POST">
-            <h2>Criar Ingrediente</h2>
-            <div class="form-group">
-                <label>Nome:</label>
-                <input type="text" id="nome" name="nome" required>
-            </div>
-            <button type="submit" class="btn btn-add">Criar Ingrediente</button>
-        </form>
-    </div>
 </body>
 </html>
 
 <script>
-    // Armazena os IDs dos ingredientes que já foram adicionados
     const ingredientesAdicionados = new Set();
     let ingredienteIdCounter = 0;
 
+    // Funções do Modal
+    const modal = document.getElementById('modal-criar-ingrediente');
+    function abrirModal() {
+        modal.style.display = "block";
+    }
+    function fecharModal() {
+        modal.style.display = "none";
+    }
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            fecharModal();
+        }
+    }
+
+    // Funções para adicionar/remover ingredientes
     function adicionarIngredienteNaLista() {
         const select = document.getElementById('ingrediente-select');
         const inputQuantidade = document.getElementById('quantidade-input');
-        
         const idIngrediente = select.value;
         const nomeIngrediente = select.options[select.selectedIndex].text;
         const quantidade = inputQuantidade.value.trim();
 
-        // Validação 1: Não adiciona se não houver ingrediente ou quantidade
         if (!idIngrediente || !quantidade) {
             alert('Por favor, selecione um ingrediente e informe a quantidade.');
             return;
         }
-
-        // Validação 2: Verifica se o ingrediente já foi adicionado
         if (ingredientesAdicionados.has(idIngrediente)) {
             alert('Este ingrediente já foi adicionado à receita.');
             return;
         }
 
         const uniqueId = ingredienteIdCounter++;
-
-        // Adiciona à lista visual
         const listaVisualContainer = document.getElementById('lista-ingredientes-adicionados');
         const itemVisual = document.createElement('div');
         itemVisual.className = 'item-visual';
         itemVisual.setAttribute('data-id', uniqueId);
-        itemVisual.innerHTML = `
-            <span>${nomeIngrediente} - ${quantidade}</span>
-            <button type="button" class="btn btn-remove" onclick="removerIngrediente(${uniqueId}, '${idIngrediente}')">Remover</button>
-        `;
+        itemVisual.innerHTML = `<span>${nomeIngrediente} - ${quantidade}</span><button type="button" class="btn btn-remove" onclick="removerIngrediente(${uniqueId}, '${idIngrediente}')">Remover</button>`;
         listaVisualContainer.appendChild(itemVisual);
 
-        // Adiciona os campos ocultos para o formulário
         const hiddenContainer = document.getElementById('hidden-ingredientes-container');
         const hiddenInputs = document.createElement('div');
         hiddenInputs.setAttribute('data-id', uniqueId);
-        hiddenInputs.innerHTML = `
-            <input type="hidden" name="ingrediente[]" value="${idIngrediente}">
-            <input type="hidden" name="quantidade[]" value="${quantidade}">
-        `;
+        hiddenInputs.innerHTML = `<input type="hidden" name="ingrediente[]" value="${idIngrediente}"><input type="hidden" name="quantidade[]" value="${quantidade}">`;
         hiddenContainer.appendChild(hiddenInputs);
 
-        // Registra o ID do ingrediente como adicionado
         ingredientesAdicionados.add(idIngrediente);
-
-        // Limpa os campos de entrada
         select.selectedIndex = 0;
         inputQuantidade.value = '';
     }
 
     function removerIngrediente(uniqueId, idIngrediente) {
-        // Remove da lista visual
         const itemVisual = document.querySelector(`.item-visual[data-id="${uniqueId}"]`);
-        if (itemVisual) {
-            itemVisual.remove();
-        }
-
-        // Remove os campos ocultos correspondentes
+        if (itemVisual) itemVisual.remove();
         const hiddenInputs = document.querySelector(`#hidden-ingredientes-container div[data-id="${uniqueId}"]`);
-        if (hiddenInputs) {
-            hiddenInputs.remove();
-        }
-
-        // Remove o ID do controle de duplicados
+        if (hiddenInputs) hiddenInputs.remove();
         ingredientesAdicionados.delete(idIngrediente);
     }
 </script>
-
-<style>
-    .item-visual {
-        background: #f9f9f9;
-        padding: 10px;
-        border-radius: 4px;
-        margin-bottom: 5px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-    }
-</style>
