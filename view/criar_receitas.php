@@ -15,17 +15,14 @@
                 <label for="titulo">Título da Receita:</label>
                 <input type="text" id="titulo" name="titulo" required>
             </div>
-
             <div class="form-group">
                 <label for="descricao">Descrição (Modo de Preparo):</label>
                 <textarea id="descricao" name="descricao"></textarea>
             </div>
-
             <div class="form-group">
                 <label for="tempo_preparo">Tempo de Preparo:</label>
                 <input type="text" id="tempo_preparo" name="tempo_preparo" placeholder="Ex: 45 minutos">
             </div>
-
             <div class="form-group">
                 <label for="id_tipo_receita">Tipo de Receita (Categoria):</label>
                 <select id="id_tipo_receita" name="id_tipo_receita" required>
@@ -39,122 +36,143 @@
                     <?php endif; ?>
                 </select>
             </div>
-            
             <div class="form-group">
                 <label for="imagem">Foto da Receita:</label>
                 <input type="file" id="imagem" name="imagem" accept="image/*">
             </div>
 
-
             <fieldset class="fieldset">
                 <legend class="legend">Ingredientes</legend>
-                <div id="ingredientes-container">
-                    <div class="ingredient-row">
-                        <div class="form-group">
-                            <label>Ingrediente</label>
-                            <select name="ingrediente[]" class="ingrediente-select" required>
-                                <option value="">Selecione um ingrediente</option>
-                                <?php if (isset($ingredientes)): ?>
-                                    <?php foreach ($ingredientes as $ingrediente): ?>
-                                        <option value="<?= htmlspecialchars($ingrediente['id']) ?>">
-                                            <?= htmlspecialchars($ingrediente['nome']) ?>
-                                        </option>
-                                    <?php endforeach; ?>
-                                <?php endif; ?>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label>Quantidade</label>
-                            <input type="text" name="quantidade[]" class="quantidade-input" placeholder="Ex: 2 xícaras" required>
-                        </div>
+
+                <div class="ingredient-row">
+                    <div class="form-group">
+                        <label>Ingrediente</label>
+                        <select id="ingrediente-select" class="ingrediente-select">
+                            <option value="">Selecione um ingrediente</option>
+                            <?php if (isset($ingredientes)): ?>
+                                <?php foreach ($ingredientes as $ingrediente): ?>
+                                    <option value="<?= htmlspecialchars($ingrediente['id']) ?>">
+                                        <?= htmlspecialchars($ingrediente['nome']) ?>
+                                    </option>
+                                <?php endforeach; ?>
+                            <?php endif; ?>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Quantidade</label>
+                        <input type="text" id="quantidade-input" class="quantidade-input" placeholder="Ex: 2 xícaras">
                     </div>
                 </div>
-                    <button type="button" class="btn btn-add" onclick="adicionarNovaLinha()">Adicionar mais ingredientes</button>
+                <button type="button" class="btn btn-add" onclick="adicionarIngredienteNaLista()">Adicionar Ingrediente</button>
                 <hr>
 
-                <strong>Ingredientes Adicionados na Receita:</strong>
+                <strong>Ingredientes Adicionados:</strong>
                 <div id="lista-ingredientes-adicionados" style="margin-top: 15px;">
-                </div>
+                    </div>
+
+                <div id="hidden-ingredientes-container"></div>
             </fieldset>
 
             <br>
             <button type="submit" class="btn submit-btn">Salvar Receita Completa</button>
         </form>
-        
     </div>
+
     <div class="form-container">
         <form action="index.php?action=adicionarIngrediente" method="POST">
             <h2>Criar Ingrediente</h2>
-
             <div class="form-group">
-                <label >Nome:</label>
+                <label>Nome:</label>
                 <input type="text" id="nome" name="nome" required>
             </div>
-
-            <button type="submit" class="btn btn-add" >Criar Ingrediente</button>
-  
+            <button type="submit" class="btn btn-add">Criar Ingrediente</button>
         </form>
     </div>
-
-
 </body>
 </html>
 
 <script>
-// Adiciona um "ouvinte" de eventos no container principal dos ingredientes.
-        // Isso é mais eficiente do que adicionar um ouvinte para cada campo individualmente.
-        document.getElementById('ingredientes-container').addEventListener('change', atualizarListaVisual);
-        document.getElementById('ingredientes-container').addEventListener('input', atualizarListaVisual);
+    // Armazena os IDs dos ingredientes que já foram adicionados
+    const ingredientesAdicionados = new Set();
+    let ingredienteIdCounter = 0;
 
-        function adicionarNovaLinha() {
-            const container = document.getElementById('ingredientes-container');
-            // Clona a primeira linha de ingrediente que serve como modelo
-            const novaLinha = container.querySelector('.ingredient-row').cloneNode(true);
+    function adicionarIngredienteNaLista() {
+        const select = document.getElementById('ingrediente-select');
+        const inputQuantidade = document.getElementById('quantidade-input');
+        
+        const idIngrediente = select.value;
+        const nomeIngrediente = select.options[select.selectedIndex].text;
+        const quantidade = inputQuantidade.value.trim();
 
-            // Limpa os valores dos campos clonados para que o usuário possa preencher
-            novaLinha.querySelector('select').selectedIndex = 0;
-            novaLinha.querySelector('input').value = '';
-
-            // Cria um botão de remover para a nova linha
-            const btnRemover = document.createElement('button');
-            btnRemover.type = 'button';
-            btnRemover.className = 'btn btn-remove';
-            btnRemover.innerText = 'Remover';
-            btnRemover.onclick = function() {
-                // Remove o elemento pai do botão (a div.ingredient-row)
-                this.parentElement.remove();
-                // Atualiza a lista visual após remover a linha
-                atualizarListaVisual();
-            };
-            
-            novaLinha.appendChild(btnRemover);
-            container.appendChild(novaLinha);
+        // Validação 1: Não adiciona se não houver ingrediente ou quantidade
+        if (!idIngrediente || !quantidade) {
+            alert('Por favor, selecione um ingrediente e informe a quantidade.');
+            return;
         }
 
-        function atualizarListaVisual() {
-            const listaContainer = document.getElementById('lista-ingredientes-adicionados');
-            // Limpa a lista atual para recriá-la com os valores mais recentes
-            listaContainer.innerHTML = '';
-
-            // Pega todas as linhas de ingredientes que existem no formulário
-            const todasAsLinhas = document.querySelectorAll('#ingredientes-container .ingredient-row');
-
-            todasAsLinhas.forEach(linha => {
-                const select = linha.querySelector('.ingrediente-select');
-                const inputQuantidade = linha.querySelector('.quantidade-input');
-                
-                // Pega o texto do ingrediente selecionado (ex: "Farinha de Trigo")
-                const nomeIngrediente = select.options[select.selectedIndex].text;
-                // Pega o valor digitado da quantidade
-                const quantidade = inputQuantidade.value;
-
-                // Só adiciona na lista se um ingrediente foi selecionado e uma quantidade foi digitada
-                if (select.value && quantidade) {
-                    const itemDaLista = document.createElement('div');
-                    itemDaLista.textContent = `${nomeIngrediente} - ${quantidade}`; // Ex: "Farinha de Trigo - 2 xícaras"
-                    listaContainer.appendChild(itemDaLista);
-                }
-            });
+        // Validação 2: Verifica se o ingrediente já foi adicionado
+        if (ingredientesAdicionados.has(idIngrediente)) {
+            alert('Este ingrediente já foi adicionado à receita.');
+            return;
         }
 
+        const uniqueId = ingredienteIdCounter++;
+
+        // Adiciona à lista visual
+        const listaVisualContainer = document.getElementById('lista-ingredientes-adicionados');
+        const itemVisual = document.createElement('div');
+        itemVisual.className = 'item-visual';
+        itemVisual.setAttribute('data-id', uniqueId);
+        itemVisual.innerHTML = `
+            <span>${nomeIngrediente} - ${quantidade}</span>
+            <button type="button" class="btn btn-remove" onclick="removerIngrediente(${uniqueId}, '${idIngrediente}')">Remover</button>
+        `;
+        listaVisualContainer.appendChild(itemVisual);
+
+        // Adiciona os campos ocultos para o formulário
+        const hiddenContainer = document.getElementById('hidden-ingredientes-container');
+        const hiddenInputs = document.createElement('div');
+        hiddenInputs.setAttribute('data-id', uniqueId);
+        hiddenInputs.innerHTML = `
+            <input type="hidden" name="ingrediente[]" value="${idIngrediente}">
+            <input type="hidden" name="quantidade[]" value="${quantidade}">
+        `;
+        hiddenContainer.appendChild(hiddenInputs);
+
+        // Registra o ID do ingrediente como adicionado
+        ingredientesAdicionados.add(idIngrediente);
+
+        // Limpa os campos de entrada
+        select.selectedIndex = 0;
+        inputQuantidade.value = '';
+    }
+
+    function removerIngrediente(uniqueId, idIngrediente) {
+        // Remove da lista visual
+        const itemVisual = document.querySelector(`.item-visual[data-id="${uniqueId}"]`);
+        if (itemVisual) {
+            itemVisual.remove();
+        }
+
+        // Remove os campos ocultos correspondentes
+        const hiddenInputs = document.querySelector(`#hidden-ingredientes-container div[data-id="${uniqueId}"]`);
+        if (hiddenInputs) {
+            hiddenInputs.remove();
+        }
+
+        // Remove o ID do controle de duplicados
+        ingredientesAdicionados.delete(idIngrediente);
+    }
 </script>
+
+<style>
+    .item-visual {
+        background: #f9f9f9;
+        padding: 10px;
+        border-radius: 4px;
+        margin-bottom: 5px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+</style>
