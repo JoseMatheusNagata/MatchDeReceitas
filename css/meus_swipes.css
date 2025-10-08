@@ -3,9 +3,14 @@ body {
     background-color: #f4f4f4;
     margin: 0;
     padding: 20px;
+    padding-top: 120px; 
+    height: 75vh;
+    overflow-y: auto;
+
 }
 .container {
-    max-width: 800px;
+    min-width: 800px;
+    max-width: 1200px;
     margin: auto;
     background-color: #fff;
     padding: 30px;
