@@ -8,7 +8,7 @@ require_once "./model/Ingrediente.php";
 
 class ReceitaController {
 
-
+    private $dao;
     public function __construct() {
         $this->dao = new ReceitaDAO();
     }

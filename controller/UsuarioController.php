@@ -7,6 +7,7 @@ require_once "./model/UsuarioDAO.php";
 
 class UsuarioController {
 
+    private $dao;
 
     public function __construct() {
         $this->dao = new UsuarioDAO();
