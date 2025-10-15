@@ -10,7 +10,7 @@
     <div id="modal-criar-ingrediente" class="modal">
         <div class="modal-content">
             <span class="close-btn" onclick="fecharModal()">&times;</span>
-            <div class="form-container" style="box-shadow: none; padding: 0;">
+            <div id="form-custom" class="form-container" style="box-shadow: none; padding: 0;">
                 <form action="index.php?action=adicionarIngrediente" method="POST">
                     <h2>Criar Novo Ingrediente</h2>
                     <div class="form-group">

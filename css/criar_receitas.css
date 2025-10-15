@@ -111,14 +111,21 @@ textarea {
 }
 .modal-content {
     background-color: #fefefe;
-    margin: 15% auto; 
+    margin: 15% auto;
     padding: 20px;
     border: 1px solid #888;
-    width: 80%;
+    width: 90%;
     max-width: 500px;
     border-radius: 8px;
     position: relative;
+    box-sizing: border-box;
 }
+
+#form-custom { 
+    width: 400px;     
+    height: 180px;
+}
+
 .close-btn {
     color: #aaa;
     position: absolute;
