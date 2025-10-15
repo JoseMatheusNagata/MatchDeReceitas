@@ -13,11 +13,23 @@ class ReceitaController {
         $this->dao = new ReceitaDAO();
     }
 
-    #public function minhasReceitas() {
-    #    include "view/minhas_receitas.php";
-    #}
+        /** ===========================
+     *  PROTEÇÃO CSRF
+     *  =========================== */
+    private function checkCsrf(): void {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            if (!isset($_POST['csrf_token']) || $_POST['csrf_token'] !== $_SESSION['csrf_token']) {
+                die("CSRF token inválido. Ação bloqueada.");
+            }
+        }
+    }
 
+    /** ===========================
+     *  salva a receita
+     *  =========================== */
      public function adicionarReceita(){
+        $this->checkCsrf();
+        
         // Verifica se o usuário está logado antes de continuar
         if (!isset($_SESSION['id'])) {
             //Se não estiver logado, redireciona para a página de login com um erro
@@ -62,8 +74,12 @@ class ReceitaController {
     }
     
 
-
+    /** ===========================
+     *  salva o novo indrediente
+     *  =========================== */
     public function adicionarIngrediente() {
+        $this->checkCsrf();
+
         if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_POST['nome'])) {
             $nome = htmlspecialchars(strip_tags($_POST['nome']));
             $ingrediente = new Ingrediente($nome);

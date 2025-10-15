@@ -12,6 +12,7 @@
             <span class="close-btn" onclick="fecharModal()">&times;</span>
             <div id="form-custom" class="form-container" style="box-shadow: none; padding: 0;">
                 <form action="index.php?action=adicionarIngrediente" method="POST">
+                    <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($_SESSION['csrf_token']) ?>">
                     <h2>Criar Novo Ingrediente</h2>
                     <div class="form-group">
                         <label>Nome do Ingrediente:</label>
@@ -26,6 +27,8 @@
     <div class="form-container">
         <h2>Criar Nova Receita</h2>
         <form action="index.php?action=adicionarReceita" method="POST" enctype="multipart/form-data">
+
+            <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($_SESSION['csrf_token']) ?>">
 
             <div class="form-group">
                 <label for="titulo">Título da Receita:</label>

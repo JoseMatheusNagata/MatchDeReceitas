@@ -7,6 +7,17 @@ require_once "./model/Swipe.php";
 require_once "./model/ReceitaDAO.php";
 
 class SwipeController {
+    
+    /** ===========================
+     *  PROTEÇÃO CSRF
+     *  =========================== */
+    private function checkCsrf(): void {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            if (!isset($_POST['csrf_token']) || $_POST['csrf_token'] !== $_SESSION['csrf_token']) {
+                die("CSRF token inválido. Ação bloqueada.");
+            }
+        }
+    }
 
     /**
      * Carrega os swipes do usuario logado
@@ -37,6 +48,8 @@ class SwipeController {
      * Altera o status de um swipe de like para dislike ou vice-versa.
      */
     public function alterarStatusSwipe() {
+        $this->checkCsrf();
+
         if (!isset($_SESSION['id'])) {
             header("Location: index.php?action=formLogin&erro=2");
             exit;

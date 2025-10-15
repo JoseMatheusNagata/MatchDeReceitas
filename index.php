@@ -3,6 +3,10 @@
 #nao remover!!
 session_start();
 
+if (empty($_SESSION['csrf_token'])) {
+    $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+}
+
 #echo '<pre style="background: #eee; padding: 10px; border: 1px solid #ccc;">';
 #var_dump($_SESSION);
 #echo '</pre>';
@@ -128,7 +132,6 @@ switch ($action) {
                 </script>
             <?php endif; ?>
 
-            
         </header>
     </body>
 </html>

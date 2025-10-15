@@ -73,6 +73,7 @@
                                 <?php endif; ?>
                                 
                                 <form action="index.php?action=alterarStatusSwipe" method="POST" style="margin-top: 20px;">
+                                    <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($_SESSION['csrf_token']) ?>">
                                     <input type="hidden" name="id_receita" value="<?= $swipe->id_receita ?>">
                                     <input type="hidden" name="status_atual" value="<?= $swipe->status ?>">
                                     <?php
