@@ -92,3 +92,20 @@ nav a:hover{
     object-fit: cover;
     border: 3px solid #ccc;
 }
+
+/* ESTILOS PARA A NOTIFICAÇÃO */
+.alert-notification {
+    position: fixed;
+    top: 90px; 
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 15px 25px;
+    border-radius: 8px;
+    background-color: #5cb85c;
+    color: white;
+    font-weight: bold;
+    z-index: 1000;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    opacity: 1;
+    transition: opacity 0.5s ease-in-out;
+}

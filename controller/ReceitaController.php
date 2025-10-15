@@ -51,9 +51,12 @@ class ReceitaController {
 
 
         // Chama o DAO para inserir a receita e seus ingredientes
-        $this->dao->inserirReceitaCompleta($receita, $ingredientes, $quantidades);
-        
-        // Redireciona para a mesma página (ou uma de sucesso)
+        if($this->dao->inserirReceitaCompleta($receita, $ingredientes, $quantidades)) {
+            $_SESSION['alert_message'] = "Receita criada com sucesso!";
+
+        }else {
+            $_SESSION['alert_message'] = "Erro ao criar a receita.";
+        }
         header("Location: index.php?action=meusSwipes");
         exit();
     }

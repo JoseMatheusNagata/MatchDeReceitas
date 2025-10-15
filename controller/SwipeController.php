@@ -50,7 +50,15 @@ class SwipeController {
             $novo_status = ($status_atual == 'like') ? 'dislike' : 'like';
 
             $swipeDAO = new SwipeDAO();
-            $swipeDAO->mudarStatus($id_usuario, $id_receita, $novo_status);
+            if ($swipeDAO->mudarStatus($id_usuario, $id_receita, $novo_status)) {
+                if($_POST['status_atual'] == 'like'){
+                    $_SESSION['alert_message'] = "Receita movida para as receitas 'Não Curtidas'!";
+                }else {
+                    $_SESSION['alert_message'] = "Receita movida para as receitas 'Curtidas'!";
+                }
+            } else {
+                $_SESSION['alert_message'] = "Erro ao tentar alterar o status da receita.";
+            }        
         }
 
         header("Location: index.php?action=meusSwipes");

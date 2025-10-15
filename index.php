@@ -109,6 +109,26 @@ switch ($action) {
                 } else {
             }   
             ?>
+
+            <?php if (isset($_SESSION['alert_message'])): ?>
+                <div id="alert-notification" class="alert-notification">
+                    <?php echo $_SESSION['alert_message']; ?>
+                </div>
+                <?php unset($_SESSION['alert_message']); // Limpa a mensagem para não exibir novamente ?>
+                <script>
+                    // Faz a notificação desaparecer após 5 segundos
+                    setTimeout(function() {
+                        const alert = document.getElementById('alert-notification');
+                        if (alert) {
+                            // Adiciona uma transição suave para desaparecer
+                            alert.style.opacity = '0';
+                            setTimeout(() => alert.style.display = 'none', 500);
+                        }
+                    }, 5000);
+                </script>
+            <?php endif; ?>
+
+            
         </header>
     </body>
 </html>
