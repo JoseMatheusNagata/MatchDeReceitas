@@ -1,3 +1,4 @@
+<?php require_once __DIR__ . '/../controller/AuthCheckController.php'; ?>
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>

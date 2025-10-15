@@ -16,6 +16,16 @@
                 <p>Receitas na palma da sua mão!</p>
             </div>
 
+            <?php
+                if (isset($_GET['erro'])) {
+                    if ($_GET['erro'] == 1) {
+                        echo '<p style="color: red; text-align: center;">E-mail ou senha inválidos!</p>';
+                    } elseif ($_GET['erro'] == 2) {
+                        echo '<p style="color: red; text-align: center;">Acesso restrito. Faça login para continuar.</p>';
+                    }
+                }
+            ?>
+
             <div class="card-group">
                 <label>Email</label>
                 <input type="email" name="email" placeholder="Digite seu Email" required>
