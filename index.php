@@ -109,6 +109,10 @@ switch ($action) {
                 <?php if (isset($_SESSION['id'])): ?>
                     <a class="btnNav" href="index.php?action=carregarFeed">Feed</a>
                 <?php endif; ?>
+
+                <?php if (isset($_SESSION['id'])): ?>
+                    <a class="btnNav" href="index.php?action=minhasReceitas">Minhas Receitas</a>
+                <?php endif; ?>
             </nav>
             
             <?php if (isset($_SESSION['id'])): ?>
