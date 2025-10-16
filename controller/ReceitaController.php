@@ -99,11 +99,22 @@ class ReceitaController {
         // Carrega a View e passa os dados para ela
         require __DIR__ . '/../view/criar_receitas.php';
     }
-    public function carregarReceitas() {
-        global $pdo;
-        $receitas = $this->dao->getAllReceitas();
+    public function minhasReceitas() {
+         $receitas = [];
+        if (method_exists($this->dao, 'getAllReceitasByUsuario')) {
+            try {
+                $ref = new \ReflectionMethod($this->dao, 'getAllReceitasByUsuario');
+                if ($ref->getNumberOfRequiredParameters() >= 1) {
+                    $receitas = $this->dao->getAllReceitasByUsuario($_SESSION['id']);
+                } else {
+                    $receitas = $this->dao->getAllReceitasByUsuario();
+                }
+            } catch (\ReflectionException $e) {
+                $receitas = [];
+            }
+        }
 
-        require __DIR__ . '/../view/carregar_receitas.php';
+        require __DIR__ . '/../view/minhas_receitas.php';
     }
 
 }

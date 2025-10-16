@@ -72,6 +72,10 @@ switch ($action) {
     case 'carregarReceitas':
         $controllerSwipe->carregarReceitas();
         break;
+    
+    case 'minhasReceitas':
+        $controllerReceita->minhasReceitas();
+        break;
 
     default:
         $controllerUsuario->home();
@@ -97,6 +101,10 @@ switch ($action) {
        
                 <?php if (isset($_SESSION['id'])): ?>
                     <a class="btnNav" href="index.php?action=meusSwipes">Meus Swipes</a>
+                <?php endif; ?>
+
+                <?php if (isset($_SESSION['id'])): ?>
+                    <a class="btnNav" href="index.php?action=minhasReceitas">Minhas Receitas</a>
                 <?php endif; ?>
             </nav>
             
