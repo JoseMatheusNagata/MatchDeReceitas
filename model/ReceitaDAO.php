@@ -80,6 +80,10 @@ class ReceitaDAO {
         $stmt = $pdo->query("SELECT id, descricao FROM tipo_receita ORDER BY descricao ASC");
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
-
+      public function getAllReceitasByUsuario() {
+        global $pdo;
+        $stmt = $pdo->query("SELECT * from receita where usuario_id = $_SESSION[id]");
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
 }
 ?>

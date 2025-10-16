@@ -72,6 +72,10 @@ switch ($action) {
     case 'carregarReceitas':
         $controllerSwipe->carregarReceitas();
         break;
+    
+    case 'minhasReceitas':
+        $controllerReceita->minhasReceitas();
+        break;
 
     case 'carregarFeed':
         $controllerSwipe->carregarFeed();
