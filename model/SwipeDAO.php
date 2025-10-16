@@ -77,5 +77,24 @@ class SwipeDAO {
             return false;
         }
     }
+
+    function feedDeReceitas(){
+        global $pdo;
+        try {
+            $sql = "SELECT r.*, 
+                    tr.descricao AS tipo_receita
+                    FROM receita r
+                    JOIN tipo_receita tr ON r.id_tipo_receita = tr.id
+                    WHERE r.id NOT IN (SELECT id_receita FROM receita r, swipe s where r.id = s.id_receita)";
+            $stmt = $pdo->prepare($sql);
+            $stmt->execute();
+            $listaFeed = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            return $listaFeed;
+        } catch (PDOException $e) {
+            echo "Erro ao buscar receitas para o feed: " . $e->getMessage();
+            return [];
+        }
+    }
+
 }
 ?>

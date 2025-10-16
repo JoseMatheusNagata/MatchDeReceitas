@@ -8,6 +8,12 @@ require_once "./model/ReceitaDAO.php";
 
 class SwipeController {
     
+
+    
+    private $dao;
+    public function __construct() {
+        $this->dao = new SwipeDAO();
+    }
     /** ===========================
      *  PROTEÇÃO CSRF
      *  =========================== */
@@ -76,6 +82,14 @@ class SwipeController {
 
         header("Location: index.php?action=meusSwipes");
         exit;
+    }
+    public function carregarFeed() {
+        global $pdo;
+
+        $listaFeed = $this->dao->feedDeReceitas();
+
+        require __DIR__ . '/../view/feed.php';
+
     }
 
 }
