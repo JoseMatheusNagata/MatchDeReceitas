@@ -4,45 +4,44 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Meus Swipes</title>
+    <title>Feed de Receitas</title>
     <link rel="stylesheet" href="./css/meus_swipes.css">
 </head>
 <body>
-<div class="receitas-viewer">
-            <?php if (!empty($listaFeed)): ?>
-                <div id="receitas-container">
-                    <?php foreach ($listaFeed as $item): ?>
-                        <div class="receita-card"> 
-                            <?php if (!empty($item->imagem_receita)): ?>
-                                <img src="data:image/jpeg;base64,<?= base64_encode($item->imagem_receita) ?>" alt="Foto da Receita: <?= htmlspecialchars($item->titulo_receita) ?>">
-                            <?php else: ?>
-                                <img src="img/imagem_padrao.png" alt="Imagem Padrão para <?= htmlspecialchars($item->titulo_receita) ?>">
+<div class="container">
+    <h1>Feed de Receitas</h1>
+    <div class="receitas-viewer">
+        <?php if (!empty($listaFeed)): ?>
+            <div id="receitas-container">
+                <?php foreach ($listaFeed as $item): ?>
+                    <div class="receita-card">
+                        <?php if (!empty($item->imagem)): ?>
+                            <img src="data:image/jpeg;base64,<?= base64_encode($item->imagem) ?>" alt="Foto da Receita: <?= htmlspecialchars($item->titulo) ?>">
+                        <?php else: ?>
+                            <img src="img/imagem_padrao.png" alt="Imagem Padrão para <?= htmlspecialchars($item->titulo) ?>">
+                        <?php endif; ?>
+
+                        <div class="receita-content">
+                            <h2><?= htmlspecialchars($item->titulo) ?></h2>
+
+                            <?php if (!empty($item->tempo_preparo)): ?>
+                                <p class="tempo-preparo"><strong>Tempo de Preparo:</strong> <?= htmlspecialchars($item->tempo_preparo) ?></p>
                             <?php endif; ?>
 
-                            <div class="receita-content">
-                                <h2><?= htmlspecialchars($item->titulo) ?></h2>
-
-                                
-                                <?php if (!empty($item->tempo_preparo_receita)): ?>
-                                    <p class="tempo-preparo"><strong>Tempo de Preparo:</strong> <?= htmlspecialchars($item->tempo_preparo_receita) ?></p>
-                                <?php endif; ?>
-
-                                
-
-                                <?php if (!empty($item->descricao_receita)): ?>
-                                    <div class="modo-preparo">
-                                        <h3>Modo de Preparo:</h3>
-                                        <p><?= nl2br(htmlspecialchars($item->descricao_receita)) ?></p>
-                                    </div>
-                                <?php endif; ?>
-                                
-                                
-                            </div>
+                            <?php if (!empty($item->descricao)): ?>
+                                <div class="modo-preparo">
+                                    <h3>Modo de Preparo:</h3>
+                                    <p><?= nl2br(htmlspecialchars($item->descricao)) ?></p>
+                                </div>
+                            <?php endif; ?>
                         </div>
-                    <?php endforeach; ?>
-                </div>
-            <?php endif; ?>
-
-
-
+                    </div>
+                <?php endforeach; ?>
+            </div>
+        <?php else: ?>
+            <p>Nenhuma nova receita encontrada no feed.</p>
+        <?php endif; ?>
+    </div>
+</div>
 </body>
+</html>

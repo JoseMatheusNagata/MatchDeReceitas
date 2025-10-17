@@ -1,6 +1,7 @@
 <?php
 require_once "conexao.php";
 require_once "Swipe.php";
+require_once "Receita.php";
 
 class SwipeDAO {
 
@@ -88,7 +89,8 @@ class SwipeDAO {
                     WHERE r.id NOT IN (SELECT id_receita FROM receita r, swipe s where r.id = s.id_receita)";
             $stmt = $pdo->prepare($sql);
             $stmt->execute();
-            $listaFeed = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            
+            $listaFeed = $stmt->fetchAll(PDO::FETCH_CLASS, 'Swipe');
             return $listaFeed;
         } catch (PDOException $e) {
             echo "Erro ao buscar receitas para o feed: " . $e->getMessage();
