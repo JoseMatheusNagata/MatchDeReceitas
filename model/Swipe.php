@@ -11,5 +11,16 @@ class Swipe {
     public $descricao_receita;
     public $tempo_preparo_receita;
     public $ingredientes = [];
+
+    //para a tela Feed de receitas para nao dar erro de Deprecated
+    public $id;
+    public $usuario_id;
+    public $id_tipo_receita;
+    public $titulo;
+    public $descricao;
+    public $imagem;
+    public $tempo_preparo; 
+    public $data_criacao;
+    public $tipo_receita;
 }
 ?>
