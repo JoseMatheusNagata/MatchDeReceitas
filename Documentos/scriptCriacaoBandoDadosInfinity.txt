@@ -130,6 +130,8 @@ INSERT INTO `tipo_receita` (`id`, `descricao`) VALUES
 (5, 'Sobremesa');
 
 INSERT INTO `usuario` (`id`, `nome`, `email`, `senha`) VALUES ('1', 'jose', 'jose@jose', '$2y$10$jPCwhadsUW82DtVGS/aNGeX3WC0k9T1Y7tOccZGDD59z44EJdVwZW');
+INSERT INTO `usuario` (`id`, `nome`, `email`, `senha`) VALUES ('1', 'jose2', 'jose@jose2', '$2y$10$jPCwhadsUW82DtVGS/aNGeX3WC0k9T1Y7tOccZGDD59z44EJdVwZW');
+
 
 INSERT IGNORE INTO `ingrediente` (`nome`) VALUES
 ('Ovo'), ('Sal'), ('Cebola'), ('Calabresa'), ('Farinha de Trigo'), ('Açúcar'),
