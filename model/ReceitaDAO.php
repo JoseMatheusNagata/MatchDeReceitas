@@ -64,8 +64,16 @@ class ReceitaDAO {
             $sql = "INSERT INTO ingrediente (nome) VALUES (?)";
             $stmt = $pdo->prepare($sql);
             $stmt->execute([$ingrediente->nome]);
+            
+            // Retorna os dados do ingrediente recem criado
+            return [
+                'id' => $pdo->lastInsertId(),
+                'nome' => $ingrediente->nome
+            ];
+
         } catch (PDOException $e) {
-            echo "Erro ao inserir ingrediente: " . $e->getMessage();
+            error_log("Erro ao inserir ingrediente: " . $e->getMessage());
+            return null;
         }
     }
 

@@ -74,18 +74,37 @@ class ReceitaController {
     }
     
 
+
     /** ===========================
-     *  salva o novo indrediente
-     *  =========================== */
+     * salva o novo indrediente AGORA COM AJAX
+     * =========================== */
     public function adicionarIngrediente() {
         $this->checkCsrf();
+        
+        //JSON
+        header('Content-Type: application/json');
+        $response = ['success' => false, 'message' => 'Erro desconhecido.'];
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_POST['nome'])) {
             $nome = htmlspecialchars(strip_tags($_POST['nome']));
             $ingrediente = new Ingrediente($nome);
-            $this->dao->adicionarIngrediente($ingrediente);
+            
+            // Chama o DAO que agora retorna os dados
+            $novoIngrediente = $this->dao->adicionarIngrediente($ingrediente);
+
+            if ($novoIngrediente) {
+                $response = [
+                    'success' => true,
+                    'message' => 'Ingrediente adicionado!',
+                    'ingrediente' => $novoIngrediente
+                ];
+            } else {
+                $response['message'] = 'Erro ao salvar o ingrediente no banco de dados.';
+            }
+        } else {
+            $response['message'] = 'O nome do ingrediente não pode estar vazio.';
         }
-        header("Location: index.php?action=criarReceitas");
+        echo json_encode($response);
         exit();
     }
 

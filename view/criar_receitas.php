@@ -12,7 +12,7 @@
         <div class="modal-content">
             <span class="close-btn" onclick="fecharModal()">&times;</span>
             <div id="form-custom" class="form-container" style="box-shadow: none; padding: 0;">
-                <form action="index.php?action=adicionarIngrediente" method="POST">
+                <form id="form-novo-ingrediente" action="index.php?action=adicionarIngrediente" method="POST">
                     <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($_SESSION['csrf_token']) ?>">
                     <h2>Criar Novo Ingrediente</h2>
                     <div class="form-group">
@@ -163,4 +163,93 @@
         if (hiddenInputs) hiddenInputs.remove();
         ingredientesAdicionados.delete(idIngrediente);
     }
+
+    //AJAX PARA NOVO INGREDIENTE
+    document.getElementById('form-novo-ingrediente').addEventListener('submit', function(event) {
+        event.preventDefault(); 
+
+        const form = event.target;
+        const formData = new FormData(form);
+        const url = form.action;
+
+        // Envia os dados do formulário de forma assíncrona (AJAX)
+        fetch(url, {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success && data.ingrediente) {
+                //Pega o select principal da página
+                const selectIngrediente = document.getElementById('ingrediente-select');
+                
+                //Cria a nova <option>
+                const novaOpcao = document.createElement('option');
+                novaOpcao.value = data.ingrediente.id;
+                novaOpcao.textContent = data.ingrediente.nome; 
+                
+                //Adiciona a nova opção ao final da lista
+                selectIngrediente.appendChild(novaOpcao);
+                
+                //Seleciona automaticamente a nova opção que acabamos de adicionar
+                novaOpcao.selected = true;
+
+                //Limpa o campo de nome no modal
+                form.querySelector('input[name="nome"]').value = '';
+                
+                //Fecha o modal
+                fecharModal();
+
+                //EXIBE A NOTIFICAÇÃO DE SUCESSO!
+                showAjaxNotification(data.message || 'Ingrediente salvo com sucesso!');
+
+
+            } else {
+                //Se algo deu errado (ex: validação falhou), exibe a notificação de erro
+                showAjaxNotification(data.message || 'Não foi possível adicionar o ingrediente.', 'error');
+            }
+        })
+        .catch(error => {
+            console.error('Erro no fetch:', error);
+            showAjaxNotification('Ocorreu um erro de comunicação ao salvar.', 'error');
+        });
+    });
+
+    /**
+     * Exibe uma notificação flutuante
+     * @param {string} message A mensagem para exibir
+     * @param {string} type 'success' (verde) ou 'error' (vermelho)
+     */
+    function showAjaxNotification(message, type = 'success') {
+        //Remove qualquer notificação antiga que possa existir
+        const oldAlert = document.getElementById('alert-notification');
+        if (oldAlert) {
+            oldAlert.remove();
+        }
+
+        //Cria o novo elemento de notificação
+        const alertDiv = document.createElement('div');
+        alertDiv.id = 'alert-notification';
+        alertDiv.className = 'alert-notification';
+        alertDiv.textContent = message;
+
+        //Adiciona cor de sucesso (verde) ou erro (vermelho)
+        if (type === 'error') {
+            alertDiv.style.backgroundColor = '#d9534f'; 
+        } else {
+            alertDiv.style.backgroundColor = '#5cb85c'; 
+        }
+
+        //Adiciona a notificação ao corpo da página
+        document.body.appendChild(alertDiv);
+
+        //quanto tempo fica a notificação na tela
+        setTimeout(function() {
+            alertDiv.style.opacity = '0';
+            setTimeout(function() {
+                alertDiv.remove();
+            }, 500); 
+        }, 4000);
+    }
+
 </script>
