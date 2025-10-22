@@ -5,7 +5,7 @@ require_once "Receita.php";
 
 class SwipeDAO {
 
-    public function getSwipesByUsuario($id_usuario, $status_filtro = null, $id_tipo_receita = null) {
+    public function getSwipesByUsuario($id_usuario, $status_filtro = null, $id_tipo_receita = null, $titulo_filtro = null) {
         global $pdo;
         try {
             $sql = "SELECT s.*, 
@@ -25,6 +25,10 @@ class SwipeDAO {
                 $sql .= " AND r.id_tipo_receita = :id_tipo_receita";
             }
 
+            if ($titulo_filtro) {
+                $sql .= " AND r.titulo LIKE :titulo";
+            }
+
             $stmt = $pdo->prepare($sql);
             $stmt->bindParam(':id_usuario', $id_usuario, PDO::PARAM_INT);
 
@@ -34,6 +38,11 @@ class SwipeDAO {
 
             if ($id_tipo_receita) {
                 $stmt->bindParam(':id_tipo_receita', $id_tipo_receita, PDO::PARAM_INT);
+            }
+
+            if ($titulo_filtro) {
+                $nome_like = '%' . $titulo_filtro . '%';
+                $stmt->bindParam(':titulo', $nome_like, PDO::PARAM_STR);
             }
 
             $stmt->execute();

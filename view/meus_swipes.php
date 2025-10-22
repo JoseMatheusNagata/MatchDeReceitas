@@ -14,6 +14,11 @@
         <form method="GET" action="index.php">
             <input type="hidden" name="action" value="meusSwipes">
             <div class="filter-container">
+                <label for="titulo">Buscar por nome:</label>
+                <input type="text" name="titulo" id="titulo" placeholder="Digite o nome da receita" value="<?= htmlspecialchars($titulo_filtro ?? '') ?>">
+            </div>
+
+            <div class="filter-container">
                 <label for="status">Filtrar por:</label>
                 <select name="status" id="status" onchange="this.form.submit()">
                     <option value="" <?= ($status_filtro == '') ? 'selected' : '' ?>>Todas</option>

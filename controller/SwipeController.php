@@ -41,7 +41,9 @@ class SwipeController {
 
         $tipo_receita_filtro = $_GET['id_tipo_receita'] ?? null;
 
-        $swipes = $swipeDAO->getSwipesByUsuario($_SESSION['id'], $status_filtro, $tipo_receita_filtro);
+        $titulo_filtro = $_GET['titulo'] ?? null;
+
+        $swipes = $swipeDAO->getSwipesByUsuario($_SESSION['id'], $status_filtro, $tipo_receita_filtro, $titulo_filtro);
 
         $tiposReceita = $receitaDAO->getAllTiposReceitas();
 

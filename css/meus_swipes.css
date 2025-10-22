@@ -33,7 +33,7 @@ h1 {
     margin-right: 10px;
 }
 
-.filter-container select {
+.filter-container select, input {
     padding: 8px 12px;
     border-radius: 4px;
     border: 1px solid #ddd;
