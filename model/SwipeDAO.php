@@ -91,11 +91,19 @@ class SwipeDAO {
     function feedDeReceitas(){
         global $pdo;
         try {
-            $sql = "SELECT r.*, 
-                    tr.descricao AS tipo_receita
+            //todas as receitas (r) e seus tipos (tr)
+            //faz um LEFT JOIN com a tabela 'swipe' (s) APENAS para o usuário logado
+            //onde s.id_usuario É NULO (ou seja, onde não houve match no LEFT JOIN,
+            //significando que o usuário logado NUNCA deu like/dislike nessa receita)
+            //E ONDE o ID do criador da receita (r.usuario_id) é DIFERENTE do usuário logado.
+            $id_usuario_logado = $_SESSION['id'];
+            $sql = "SELECT r.*, tr.descricao AS tipo_receita
                     FROM receita r
                     JOIN tipo_receita tr ON r.id_tipo_receita = tr.id
-                    WHERE r.id NOT IN (SELECT id_receita FROM receita r, swipe s where r.id = s.id_receita)";
+                    LEFT JOIN swipe s ON r.id = s.id_receita AND s.id_usuario = $id_usuario_logado
+                    WHERE 
+                        s.id_usuario IS NULL 
+                        AND r.usuario_id != $id_usuario_logado";
             $stmt = $pdo->prepare($sql);
             $stmt->execute();
             
