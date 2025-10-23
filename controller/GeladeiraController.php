@@ -107,4 +107,30 @@ class GeladeiraController {
         }
         exit;
     }
+
+    public function salvarSwipe(){
+    $this->checkCsrf();
+
+    if (!isset($_SESSION['id'])) {
+        echo json_encode(['success' => false, 'message' => 'Usuário não logado.']);
+        exit;
+    }
+
+    if ($_SERVER["REQUEST_METHOD"] == "POST") {
+        if (isset($_POST['acao'])) {
+            $valorBotao = $_POST['acao'];
+            if($_POST['acao'] == "like"){
+                $this->dao->criarSwipe($valor_botao, $status = "like"); 
+            }else {
+                $this->dao->criarSwipe($valor_botao, $status = "dislike"); 
+            }
+            
+            $this->dao->criarSwipe($valor_botao);        
+        }
+    }
+
+    
+        
+    
+    }
 }

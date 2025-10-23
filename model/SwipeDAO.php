@@ -115,5 +115,24 @@ class SwipeDAO {
         }
     }
 
+    function criarSwipe($valor, $status){
+        global $pdo;
+        try {
+            $sql = "INSERT INTO swipe (id_usuario, id_receita, status) VALUES (?,?,?)";
+            $id_usuario_logado = $_SESSION['id'];
+            $stmt = $pdo->prepare($sql);
+            $stmt->execute([
+                $id_receita,
+                $id_ingrediente,
+                $status
+        ]   );
+      
+   
+            
+        } catch (PDOException $e) {
+            echo "Erro ao buscar receitas para o feed: " . $e->getMessage();
+            return [];
+        }
+    }
 }
 ?>
