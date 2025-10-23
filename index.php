@@ -16,12 +16,13 @@ if (empty($_SESSION['csrf_token'])) {
 require_once "controller/UsuarioController.php";
 require_once "controller/ReceitaController.php";
 require_once "controller/SwipeController.php";
-
+require_once "controller/GeladeiraController.php";
 
 
 $controllerUsuario = new UsuarioController();
 $controllerReceita = new ReceitaController();
 $controllerSwipe = new SwipeController();
+$controllerGeladeira = new GeladeiraController();
 
 $action = $_GET['action'] ?? 'home';
 
@@ -81,6 +82,18 @@ switch ($action) {
         $controllerSwipe->carregarFeed();
         break;
 
+    case 'carregarMinhaGeladeira':
+        $controllerGeladeira->carregarMinhaGeladeira();
+        break;
+        
+    case 'adicionarIngredienteGeladeira':
+        $controllerGeladeira->adicionarIngredienteGeladeira();
+        break;
+    
+    case 'removerIngredienteGeladeira':
+        $controllerGeladeira->removerIngredienteGeladeira();
+        break;
+
     default:
         $controllerUsuario->home();
         break;
@@ -94,10 +107,11 @@ switch ($action) {
         <title>Match de Receitas</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" href="css/index.css">
+        <link rel="icon" href="./img/logo1.png" type="image/png">
         </head>
     <body>
         <header>
-            <h2 class="logo"><img class="imgLogin" src="./img/tinder.png" alt=""></h2>
+            <h2 class="logo"><img class="imgLogin" src="./img/logo1.png" alt=""></h2>
             <nav class="navigation">
                 <?php if (isset($_SESSION['id'])): ?>
                     <a class="btnNav" href="index.php?action=criarReceitas">Criar Receitas</a>
@@ -112,6 +126,10 @@ switch ($action) {
 
                 <?php if (isset($_SESSION['id'])): ?>
                     <a class="btnNav" href="index.php?action=minhasReceitas">Minhas Receitas</a>
+                <?php endif; ?>
+
+                <?php if (isset($_SESSION['id'])): ?>
+                    <a class="btnNav" href="index.php?action=carregarMinhaGeladeira">Minha Geladeira</a>
                 <?php endif; ?>
             </nav>
             
