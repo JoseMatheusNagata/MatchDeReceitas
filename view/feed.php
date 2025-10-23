@@ -35,6 +35,14 @@
                                 </div>
                             <?php endif; ?>
                         </div>
+
+                        <form action="index.php?action=salvarSwipe" method="post">
+                            <button type="submit" name="acao" value="like">Like</button>
+                            <button type="submit" name="acao" value="deslike">Dislike</button>
+                            
+                        </form>
+                        
+       
                     </div>
                 <?php endforeach; ?>
             </div>
