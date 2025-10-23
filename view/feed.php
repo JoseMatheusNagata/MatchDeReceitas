@@ -37,8 +37,11 @@
                         </div>
 
                         <form action="index.php?action=salvarSwipe" method="post">
+                            <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($_SESSION['csrf_token']) ?>">
+                            <input type="hidden" name="id_receita" value="<?= htmlspecialchars($item->id) ?>">
+                        
                             <button type="submit" name="acao" value="like">Like</button>
-                            <button type="submit" name="acao" value="deslike">Dislike</button>
+                            <button type="submit" name="acao" value="dislike">Dislike</button>
                             
                         </form>
                         

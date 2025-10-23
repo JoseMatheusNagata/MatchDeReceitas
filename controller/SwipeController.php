@@ -94,5 +94,34 @@ class SwipeController {
 
     }
 
+    public function salvarSwipe() {
+        $this->checkCsrf();
+
+        if (!isset($_SESSION['id'])) {
+            header("Location: index.php?action=formLogin&erro=2");
+            exit;
+        }
+
+        if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['id_receita']) && isset($_POST['acao'])) {
+            
+            $id_usuario = $_SESSION['id'];
+            $id_receita = $_POST['id_receita'];
+            $status = $_POST['acao'];
+
+            if ($this->dao->criarSwipe($id_usuario, $id_receita, $status)) {
+                $_SESSION['alert_message'] = "Receita avaliada!";
+            } else {
+                $_SESSION['alert_message'] = "Erro ao avaliar a receita. Talvez você já tenha avaliado.";
+            }
+        } else {
+            $_SESSION['alert_message'] = "Requisição inválida.";
+        }
+
+        header("Location: index.php?action=carregarFeed");
+        exit;
+    }
+
 }
+
+
 ?>

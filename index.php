@@ -93,6 +93,11 @@ switch ($action) {
     case 'removerIngredienteGeladeira':
         $controllerGeladeira->removerIngredienteGeladeira();
         break;
+    
+      case 'salvarSwipe':
+        $controllerSwipe->salvarSwipe();
+        break;
+    
 
     default:
         $controllerUsuario->home();
