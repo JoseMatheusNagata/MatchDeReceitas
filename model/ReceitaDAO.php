@@ -90,8 +90,22 @@ class ReceitaDAO {
     }
       public function getAllReceitasByUsuario() {
         global $pdo;
-        $stmt = $pdo->query("SELECT * from receita where usuario_id = $_SESSION[id]");
+        $stmt = $pdo->query("SELECT Titulo from receita where usuario_id = $_SESSION[id]");
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+      public function excluirReceitas($id_usuario, $id_receitas) {
+        global $pdo;
+        try {
+            $sql = "DELETE FROM receita WHERE id_usuario = :id_usuario AND id_receita = :id_receita";
+            $stmt = $pdo->prepare($sql);
+            $stmt->bindParam(':id_usuario', $id_usuario, PDO::PARAM_INT);
+            $stmt->bindParam(':id_receita', $id_receitas, PDO::PARAM_INT);
+            return $stmt->execute();
+        } catch (PDOException $e) {
+            error_log("Erro ao remover ingrediente da geladeira: " . $e->getMessage());
+            return false;
+        }
+    }
+    
 }
 ?>
