@@ -113,6 +113,23 @@ CREATE TABLE IF NOT EXISTS `swipe` (
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
+-- -----------------------------------------------------
+-- Table `swipesdereceitas`.`geladeira`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `geladeira` (
+  `id_usuario` INT NOT NULL,
+  `id_ingrediente` INT NOT NULL,
+  `quantidade` VARCHAR(100) NULL DEFAULT NULL,
+  PRIMARY KEY (`id_usuario`, `id_ingrediente`),
+  INDEX `fk_id_ingrediente_idx` (`id_ingrediente` ASC),
+  CONSTRAINT `fk_id_ingrediente`
+    FOREIGN KEY (`id_ingrediente`)
+    REFERENCES `ingrediente` (`id`),
+  CONSTRAINT `fk_id_usuario`
+    FOREIGN KEY (`id_usuario`)
+    REFERENCES `usuario` (`id`))
+ENGINE = InnoDB;
+
 
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;

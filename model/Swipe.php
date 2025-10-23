@@ -22,5 +22,8 @@ class Swipe {
     public $tempo_preparo; 
     public $data_criacao;
     public $tipo_receita;
+
+    public ?int $total_ingredientes_receita = null;
+    public ?int $ingredientes_que_tenho = null;
 }
 ?>
