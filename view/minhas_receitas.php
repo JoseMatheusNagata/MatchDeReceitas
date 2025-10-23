@@ -90,5 +90,25 @@ function safe_str($val) {
             <?php else: ?>
                 <p>Nenhuma receita encontrada.</p>
             <?php endif; ?>
+
+            
+    <table border="1" cellpadding="6" cellspacing="0">
+        <tr><th>Id</th><th>Nome</th>
+        <?php foreach($pontos as $p): ?>
+                <tr>
+                <td><?= $p->getId() ?></td>
+                <td><?= htmlspecialchars($p->getAllReceitasByUsuario()) ?></td>
+                
+                    
+                    <a href="index.php?controller=ponto&action=form&id=<?= $p->getId() ?>">Editar</a> |
+                    <form method="post" action="index.php?controller=ponto&action=excluir" style="display:inline;">
+                        <input type="hidden" name="id" value="<?= $p->getId() ?>">
+                        <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($_SESSION['csrf_token']) ?>">
+                        <button type="submit" onclick="return confirm('Excluir?')">Excluir</button>
+                    </form>
+                </td>
+            </tr>
+        <?php endforeach; ?>
+    </table>
 </body>
 </html>
