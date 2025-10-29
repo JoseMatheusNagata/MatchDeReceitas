@@ -137,5 +137,33 @@ class SwipeDAO {
             return false;
         }
     }
+
+    /**
+     * Busca as 5 receitas com mais 'likes'.
+     */
+    public function getTop5LikedReceitas() {
+        global $pdo;
+        try {
+            $sql = "SELECT 
+                        r.id, 
+                        r.titulo, 
+                        r.imagem, 
+                        COUNT(s.id_receita) AS like_count
+                    FROM swipe s
+                    JOIN receita r ON s.id_receita = r.id
+                    WHERE s.status = 'like'
+                    GROUP BY s.id_receita
+                    ORDER BY like_count DESC
+                    LIMIT 5";
+
+            $stmt = $pdo->prepare($sql);
+            $stmt->execute();
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        } catch (PDOException $e) {
+            error_log("Erro ao buscar top 5 receitas: " . $e.getMessage());
+            return [];
+        }
+    }
 }
 ?>

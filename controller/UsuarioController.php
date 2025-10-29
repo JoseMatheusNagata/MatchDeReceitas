@@ -14,6 +14,11 @@ class UsuarioController {
     }
 
     public function home() {
+        require_once "./model/SwipeDAO.php";
+        $swipeDAO = new SwipeDAO();
+        
+        $topReceitas = $swipeDAO->getTop5LikedReceitas();
+        
         include "view/home.php";
     }
 
