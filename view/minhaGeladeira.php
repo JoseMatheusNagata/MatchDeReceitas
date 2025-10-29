@@ -15,24 +15,21 @@
         <div class="geladeira-gerenciar">
             
             <div class="geladeira-add">
-                <h3>Adicionar à Geladeira</h3>
                 <form id="form-add-ingrediente" action="index.php?action=adicionarIngredienteGeladeira" method="POST">
                     <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($_SESSION['csrf_token']) ?>">
-                    <div class="form-group">
-                        <label for="ingrediente-select">Selecione o Ingrediente:</label>
-                        <select id="ingrediente-select" name="id_ingrediente" required>
-                            <option value="">Selecione...</option>
-                            <?php if (!empty($ingredientesDisponiveis)): ?>
-                                <?php foreach ($ingredientesDisponiveis as $ing): ?>
-                                    <option value="<?= htmlspecialchars($ing['id']) ?>">
-                                        <?= htmlspecialchars($ing['nome']) ?>
-                                    </option>
-                                <?php endforeach; ?>
-                            <?php endif; ?>
-                        </select>
+
+                    <h3>Adicionar à Geladeira</h3>
+                    <div class="form-group search-container">
+                        <label for="ingrediente-search">Selecione o Ingrediente:</label>
+                        <input type="text" id="ingrediente-search" 
+                            placeholder="Digite 2+ letras para buscar..." 
+                            onkeyup="buscarIngrediente()" 
+                            autocomplete="off">
+                        <div id="ingrediente-search-results"></div>
+                        <input type="hidden" id="selected-ingrediente-id" name="id_ingrediente">
                     </div>
                     <button type="submit" class="btn btn-add">Adicionar Ingrediente</button>
-                </form>
+                </form> 
             </div>
 
             <div class="geladeira-lista">
@@ -109,6 +106,59 @@
     </div>
 
 <script>
+
+// SCRIPT DE BUSCA AJAX DE INGREDIENTES
+let debounceTimer;
+
+    function buscarIngrediente() {
+        clearTimeout(debounceTimer);
+
+        const input = document.getElementById('ingrediente-search');
+        const resultsContainer = document.getElementById('ingrediente-search-results');
+        const term = input.value.trim();
+
+        resultsContainer.innerHTML = '';
+
+        if (term.length < 2) {
+            document.getElementById('selected-ingrediente-id').value = '';
+            return;
+        }
+
+        debounceTimer = setTimeout(() => {
+            fetch('index.php?action=buscarIngredientesAJAX&term=' + encodeURIComponent(term))
+                .then(response => response.json())
+                .then(matches => {
+                    resultsContainer.innerHTML = '';
+
+                    matches.forEach(ing => {
+                        const item = document.createElement('div');
+                        item.className = 'search-result-item';
+                        item.textContent = ing.nome;
+                        item.onclick = () => selecionarIngrediente(ing.id, ing.nome);
+                        resultsContainer.appendChild(item);
+                    });
+                })
+                .catch(error => {
+                    console.error('Erro ao buscar ingredientes:', error);
+                    resultsContainer.innerHTML = '<div class="search-result-item">Erro ao buscar.</div>';
+                });
+        }, 300);
+    }
+
+    /**
+     * chamada quando o usuário clica em um item da lista de resultados
+     */
+    function selecionarIngrediente(id, nome) {
+        // Define o valor do input hidden (que será enviado no form)
+        document.getElementById('selected-ingrediente-id').value = id;
+
+        // Define o valor do input de busca (para o usuário ver)
+        document.getElementById('ingrediente-search').value = nome;
+
+        // Limpa/fecha a caixa de resultados
+        document.getElementById('ingrediente-search-results').innerHTML = '';
+    }
+
     //ajax para adicionar e remover
     
     // adicionar Ingrediente

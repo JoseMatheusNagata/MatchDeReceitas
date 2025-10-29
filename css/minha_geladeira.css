@@ -95,7 +95,8 @@ h1, h2 {
     margin-bottom: 8px; 
     font-weight: bold; 
 }
-.form-group select { 
+.form-group select,
+.form-group input[type="text"] { 
     width: 100%; 
     padding: 10px; 
     border: 1px solid #ddd; 
@@ -222,4 +223,34 @@ h1, h2 {
     box-shadow: 0 4px 8px rgba(0,0,0,0.2);
     opacity: 1;
     transition: opacity 0.5s ease-in-out;
+}
+
+.search-container {
+    position: relative;
+}
+
+#ingrediente-search-results {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    background-color: #ffffff;
+    border: 1px solid #ddd;
+    border-top: none;
+    border-radius: 0 0 4px 4px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    max-height: 250px;
+    overflow-y: auto;
+    z-index: 10;
+    box-sizing: border-box; 
+}
+
+.search-result-item {
+    padding: 12px 10px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.search-result-item:hover {
+    background-color: #f5f5f5;
 }

@@ -40,9 +40,6 @@ class GeladeiraController {
         
         $id_usuario = $_SESSION['id'];
 
-        //busca todos os ingredientes existentes para o select
-        $receitaDAO = new ReceitaDAO();
-        $ingredientesDisponiveis = $receitaDAO->getAllIngredientes();
         
         //busca os ingredientes que o usuario tem na geladeira
         $minhaGeladeira = $this->dao->getIngredientesByUsuario($id_usuario);
