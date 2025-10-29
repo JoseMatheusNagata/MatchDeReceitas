@@ -98,6 +98,9 @@ switch ($action) {
         $controllerSwipe->salvarSwipe();
         break;
     
+    case 'buscarIngredientesAJAX':
+        $controllerReceita->buscarIngredientesAJAX();
+        break;
 
     default:
         $controllerUsuario->home();

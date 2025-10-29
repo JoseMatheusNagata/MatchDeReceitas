@@ -6,6 +6,9 @@ require_once "Ingrediente.php";
 
 class ReceitaDAO {
     
+    /**
+     * salva a receita
+     */
     public function inserirReceitaCompleta(Receita $receita, array $ingredientes, array $quantidades) {
         global $pdo;
         try {
@@ -45,6 +48,9 @@ class ReceitaDAO {
         }
     }
 
+    /**
+     * inseri os ingredientes da receita
+     */
     public function inserirIngredientesDaReceita($id_receita, $id_ingrediente, $quantidades) {
         global $pdo;
         $sql = "INSERT INTO receita_ingrediente (id_receita, id_ingrediente, quantidade) VALUES (?, ?, ?)";
@@ -58,6 +64,9 @@ class ReceitaDAO {
       
     }
 
+    /**
+     * funcao de criar ingredientes
+     */
     public function adicionarIngrediente(Ingrediente $ingrediente) {
         global $pdo;
         try {
@@ -77,22 +86,25 @@ class ReceitaDAO {
         }
     }
 
-     public function getAllIngredientes() {
-        global $pdo;
-        $stmt = $pdo->query("SELECT id, nome FROM ingrediente ORDER BY nome ASC");
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
-    }
-
+    /**
+     * busca os tipos de receitas
+     */
       public function getAllTiposReceitas() {
         global $pdo;
         $stmt = $pdo->query("SELECT id, descricao FROM tipo_receita ORDER BY descricao ASC");
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+    /**
+     * busca as receitas criadas pelo usuario
+     */
       public function getAllReceitasByUsuario() {
         global $pdo;
         $stmt = $pdo->query("SELECT Titulo from receita where usuario_id = $_SESSION[id]");
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+    /**
+     * exclui as receitas
+     */
       public function excluirReceitas($id_usuario, $id_receitas) {
         global $pdo;
         try {
@@ -107,5 +119,29 @@ class ReceitaDAO {
         }
     }
     
+    /**
+     * busca ingredientes no banco de dados com base em um termo com LIKE
+     */
+    public function buscarIngredientesPorNome($termo) {
+        global $pdo;
+        try {
+            $sql = "SELECT id, nome 
+                    FROM ingrediente 
+                    WHERE nome LIKE :termo 
+                    ORDER BY nome ASC 
+                    LIMIT 20";
+            
+            $stmt = $pdo->prepare($sql);
+            $termo_like = '%' . $termo . '%';
+            $stmt->bindParam(':termo', $termo_like, PDO::PARAM_STR);
+            $stmt->execute();
+            
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        } catch (PDOException $e) {
+            error_log("Erro ao buscar ingredientes por nome: " . $e->getMessage());
+            return [];
+        }
+    }
 }
 ?>

@@ -108,16 +108,21 @@ class ReceitaController {
         exit();
     }
 
+    /**
+     * funcao que é chamada ao carregar a tela, carrega os tipos de receitas depois carrega a tela
+     */
     public function exibirFormulario() {
         global $pdo;
 
-        // Pede ao Model a lista de ingredientes
-        $ingredientes = $this->dao->getAllIngredientes();
         // Pede ao Model a lista de tipos de receita
         $tiposReceita = $this->dao->getAllTiposReceitas();
         // Carrega a View e passa os dados para ela
         require __DIR__ . '/../view/criar_receitas.php';
     }
+
+    /**
+     * funcao que chama a busca das receitas do usuario
+     */
     public function minhasReceitas() {
          $receitas = [];
         if (method_exists($this->dao, 'getAllReceitasByUsuario')) {
@@ -136,5 +141,21 @@ class ReceitaController {
         require __DIR__ . '/../view/minhas_receitas.php';
     }
 
+    /** ===========================
+     * Busca ingredientes por nome (AJAX)
+     * =========================== */
+    public function buscarIngredientesAJAX() {
+        header('Content-Type: application/json');
+        
+        $resultados = [];
+
+        if (isset($_GET['term']) && strlen($_GET['term']) >= 2) {
+            $termo = htmlspecialchars(strip_tags($_GET['term']));
+            $resultados = $this->dao->buscarIngredientesPorNome($termo);
+        }
+
+        echo json_encode($resultados);
+        exit();
+    }
 }
 ?>
