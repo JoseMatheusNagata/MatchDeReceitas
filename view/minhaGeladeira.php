@@ -52,56 +52,12 @@
         <div class="receitas-recomendadas">
             <h2>Receitas que você pode fazer agora!</h2>
             
-            <?php if (!empty($receitasRecomendadas)): ?>
-                <div id="receitas-container">
-                    <?php foreach ($receitasRecomendadas as $receita): ?>
-                        <div class="receita-card"> 
-                            <?php if (!empty($receita->imagem)): ?>
-                                <img src="data:image/jpeg;base64,<?= base64_encode($receita->imagem) ?>" alt="Foto da Receita: <?= htmlspecialchars($receita->titulo) ?>">
-                            <?php else: ?>
-                                <img src="img/imagem_padrao.png" alt="Imagem Padrão">
-                            <?php endif; ?>
+            <div id="receitas-recomendadas-content">
+                <?php
+                    include "view/listaReceitasRecomendadas.php";
+                ?>
+            </div>
 
-                            <div class="receita-content">
-                                <h2><?= htmlspecialchars($receita->titulo) ?></h2>
-                                
-                                <p class="tempo-preparo"><strong>Tipo:</strong> <?= htmlspecialchars($receita->tipo_receita) ?></p>
-
-                                <?php if (!empty($receita->tempo_preparo)): ?>
-                                    <p class="tempo-preparo"><strong>Tempo de Preparo:</strong> <?= htmlspecialchars($receita->tempo_preparo) ?></p>
-                                <?php endif; ?>
-
-                                <?php if (!empty($receita->ingredientes)): ?>
-                                    <div class="ingredientes">
-                                        <h3>Ingredientes:</h3>
-                                        <ul>
-                                            <?php foreach ($receita->ingredientes as $ingrediente): ?>
-                                                <li><?= htmlspecialchars($ingrediente['quantidade']) ?> de <?= htmlspecialchars($ingrediente['nome']) ?></li>
-                                            <?php endforeach; ?>
-                                        </ul>
-                                    </div>
-                                <?php endif; ?>
-
-                                <?php if (!empty($receita->descricao)): ?>
-                                    <div class="modo-preparo">
-                                        <h3>Modo de Preparo:</h3>
-                                        <p><?= nl2br(htmlspecialchars($receita->descricao)) ?></p>
-                                    </div>
-                                <?php endif; ?>
-                            </div>
-                        </div>
-                    <?php endforeach; ?>
-                </div>
-
-                <div class="navigation-controls">
-                    <button id="prev-btn" class="nav-btn">Anterior</button>
-                    <span id="receita-counter"></span>
-                    <button id="next-btn" class="nav-btn">Próxima</button>
-                </div>
-
-            <?php else: ?>
-                <p style="text-align: center;">Nenhuma receita encontrada com os ingredientes da sua geladeira. Tente adicionar mais itens!</p>
-                <div class="navigation-controls" style="display: none;"></div> <?php endif; ?>
         </div>
     </div>
 
@@ -149,17 +105,14 @@ let debounceTimer;
      * chamada quando o usuário clica em um item da lista de resultados
      */
     function selecionarIngrediente(id, nome) {
-        // Define o valor do input hidden (que será enviado no form)
         document.getElementById('selected-ingrediente-id').value = id;
-
-        // Define o valor do input de busca (para o usuário ver)
         document.getElementById('ingrediente-search').value = nome;
-
-        // Limpa/fecha a caixa de resultados
         document.getElementById('ingrediente-search-results').innerHTML = '';
     }
 
-    //ajax para adicionar e remover
+// =====================================================================
+// AJAX PARA ADICIONAR E REMOVER (SEM RELOAD)
+// =====================================================================
     
     // adicionar Ingrediente
     document.getElementById('form-add-ingrediente').addEventListener('submit', function(e) {
@@ -167,6 +120,14 @@ let debounceTimer;
         const form = e.target;
         const formData = new FormData(form);
         const url = form.action;
+
+        const idIngrediente = formData.get('id_ingrediente');
+        const nomeIngrediente = document.getElementById('ingrediente-search').value; 
+
+        if (!idIngrediente || !nomeIngrediente) {
+            showAjaxNotification('Por favor, selecione um ingrediente da busca.', 'error');
+            return;
+        }
 
         fetch(url, {
             method: 'POST',
@@ -176,8 +137,15 @@ let debounceTimer;
         .then(data => {
             if (data.success) {
                 showAjaxNotification(data.message || 'Ingrediente adicionado!', 'success');
-                // Recarrega a página para atualizar a lista e as recomendações
-                setTimeout(() => location.reload(), 1500);
+                
+                adicionarIngredienteNaListaVisual(idIngrediente, nomeIngrediente);
+                
+                document.getElementById('ingrediente-search').value = '';
+                document.getElementById('selected-ingrediente-id').value = '';
+
+                // Recarrega apçenas as receitas
+                recarregarReceitasRecomendadas();
+
             } else {
                 showAjaxNotification(data.message || 'Erro ao adicionar.', 'error');
             }
@@ -197,7 +165,6 @@ let debounceTimer;
         const url = 'index.php?action=removerIngredienteGeladeira';
         const formData = new FormData();
         formData.append('id_ingrediente', idIngrediente);
-        // Pega o token CSRF do formulário de adicionar
         formData.append('csrf_token', document.querySelector('input[name="csrf_token"]').value);
 
         fetch(url, {
@@ -208,8 +175,11 @@ let debounceTimer;
         .then(data => {
             if (data.success) {
                 showAjaxNotification(data.message || 'Ingrediente removido!', 'success');
-                // Recarrega a página para atualizar a lista e as recomendações
-                setTimeout(() => location.reload(), 1500);
+                
+                removerIngredienteDaListaVisual(idIngrediente);
+
+                recarregarReceitasRecomendadas();
+
             } else {
                 showAjaxNotification(data.message || 'Erro ao remover.', 'error');
             }
@@ -218,6 +188,46 @@ let debounceTimer;
             console.error('Erro no fetch:', error);
             showAjaxNotification('Ocorreu um erro de comunicação.', 'error');
         });
+    }
+
+// =====================================================================
+// FUNÇÕES DE MANIPULAÇÃO VISUAL (DOM)
+// =====================================================================
+
+    /**
+     * Adiciona o ingrediente na lista "Ingredientes na sua Geladeira"
+     */
+    function adicionarIngredienteNaListaVisual(id, nome) {
+        // Verifica se o item já não está na lista (evita clique duplo)
+        if (document.querySelector(`.item-visual[data-id="${id}"]`)) {
+            return;
+        }
+
+        // Remove a mensagem "Sua geladeira está vazia"
+        document.getElementById('msg-geladeira-vazia')?.remove();
+
+        const listaContainer = document.getElementById('lista-geladeira-atual');
+        const item = document.createElement('div');
+        item.className = 'item-visual';
+        item.setAttribute('data-id', id);
+        item.innerHTML = `
+            <span>${nome}</span>
+            <button type="button" class="btn-remove" onclick="removerIngrediente(${id})">&times;</button>
+        `;
+        listaContainer.appendChild(item);
+    }
+
+    /**
+     * Remove o ingrediente da lista "Ingredientes na sua Geladeira"
+     */
+    function removerIngredienteDaListaVisual(id) {
+        document.querySelector(`.item-visual[data-id="${id}"]`)?.remove();
+        
+        // Verifica se a lista ficou vazia
+        const listaContainer = document.getElementById('lista-geladeira-atual');
+        if (listaContainer.children.length === 0) {
+            listaContainer.innerHTML = '<p id="msg-geladeira-vazia">Sua geladeira está vazia.</p>';
+        }
     }
 
     /**
@@ -231,7 +241,7 @@ let debounceTimer;
 
         const alertDiv = document.createElement('div');
         alertDiv.id = 'ajax-alert-notification';
-        alertDiv.className = 'alert-notification';
+        alertDiv.className = 'alert-notification'; 
         alertDiv.textContent = message;
         alertDiv.style.backgroundColor = (type === 'error') ? '#d9534f' : '#5cb85c';
 
@@ -245,11 +255,43 @@ let debounceTimer;
         }, 4000);
     }
 
+// =====================================================================
+// FUNÇÃO PARA RECARREGAR AS RECEITAS
+// =====================================================================
 
-    // SCRIPT DE NAVEGAÇÃO DOS CARDS 
-    document.addEventListener('DOMContentLoaded', function() {
+    /**
+     * Busca o HTML das receitas recomendadas e atualiza a página.
+     */
+    function recarregarReceitasRecomendadas() {
+        const contentContainer = document.getElementById('receitas-recomendadas-content');
+        
+        contentContainer.innerHTML = '<p style="text-align: center; padding: 40px;">Buscando novas receitas com base na sua geladeira...</p>';
+
+        fetch('index.php?action=buscarReceitasGeladeiraAJAX')
+            .then(response => response.text())
+            .then(html => {
+                contentContainer.innerHTML = html;
+                
+                inicializarNavegacaoReceitas();
+            })
+            .catch(error => {
+                console.error('Erro ao recarregar receitas:', error);
+                contentContainer.innerHTML = '<p style="text-align: center; color: red;">Ocorreu um erro ao buscar as receitas.</p>';
+            });
+    }
+
+
+// =====================================================================
+// SCRIPT DE NAVEGAÇÃO DOS CARDS
+// =====================================================================
+
+    /**
+     * Inicia os controles "Anterior" e "Próxima" para os cards de receita.
+     */
+    function inicializarNavegacaoReceitas() {
         const receitasContainer = document.getElementById('receitas-container');
-        if (!receitasContainer) return;
+        
+        if (!receitasContainer) return; 
 
         const receitas = receitasContainer.getElementsByClassName('receita-card');
         const prevBtn = document.getElementById('prev-btn');
@@ -296,7 +338,9 @@ let debounceTimer;
                 navControls.style.display = 'none';
             }
         }
-    });
+    }
+
+    document.addEventListener('DOMContentLoaded', inicializarNavegacaoReceitas);
 
 </script>
 

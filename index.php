@@ -102,6 +102,10 @@ switch ($action) {
         $controllerReceita->buscarIngredientesAJAX();
         break;
 
+    case 'buscarReceitasGeladeiraAJAX':
+        $controllerGeladeira->buscarReceitasGeladeiraAJAX();
+        break;
+
     default:
         $controllerUsuario->home();
         break;

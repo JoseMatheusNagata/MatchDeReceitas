@@ -105,5 +105,18 @@ class GeladeiraController {
         exit;
     }
 
+    /**
+     * ajax para buscar e renderizar apenas a lista de receitas recomendadas.
+     * Usado para atualizar a página sem reload
+     */
+    public function buscarReceitasGeladeiraAJAX() { 
+        $id_usuario = $_SESSION['id'];
+        
+        $receitasRecomendadas = $this->dao->buscarReceitasCompativeis($id_usuario);
+
+        include "view/listaReceitasRecomendadas.php";
+        exit;
+    }
+
     
 }
