@@ -64,6 +64,10 @@ class GeladeiraDAO {
     /**
      * Busca receitas que o usuário pode fazer com os ingredientes da sua geladeira.
      */
+    /**
+     * Busca receitas que o usuário pode fazer com os ingredientes da sua geladeira.
+     * (Versão modificada para incluir as receitas do próprio usuário)
+     */
     public function buscarReceitasCompativeis($id_usuario) {
         global $pdo;
         try {
@@ -73,7 +77,6 @@ class GeladeiraDAO {
              * -(Sub-select 'ingredientes_que_tenho'): Conta quantos dos ingredientes exigidos o usuário POSSUI na geladeira.
              * -(WHERE/HAVING): Filtra apenas as receitas onde o total exigido é IGUAL ao que o usuário tem,
              * e onde o total exigido é maior que zero (para não pegar receitas sem ingredientes).
-             * -também exclui receitas criadas pelo próprio usuário.
              */
             $sql = "
                 SELECT 
@@ -87,18 +90,16 @@ class GeladeiraDAO {
                     ) AS ingredientes_que_tenho
                 FROM receita r
                 JOIN tipo_receita tr ON r.id_tipo_receita = tr.id
-                WHERE r.usuario_id != :id_usuario_logado
                 HAVING total_ingredientes_receita > 0 AND total_ingredientes_receita = ingredientes_que_tenho
                 ORDER BY r.titulo ASC
             ";
             
             $stmt = $pdo->prepare($sql);
             $stmt->bindParam(':id_usuario', $id_usuario, PDO::PARAM_INT);
-            $stmt->bindParam(':id_usuario_logado', $id_usuario, PDO::PARAM_INT); // Usamos o mesmo ID para as duas condições
             $stmt->execute();
             
             $receitas = $stmt->fetchAll(PDO::FETCH_CLASS, 'Swipe');
-
+            
             //para cada receita compatível, buscamos também os ingredientes
             foreach ($receitas as $receita) {
                 $sql_ingredientes = "SELECT i.nome, ri.quantidade 
