@@ -26,7 +26,22 @@ class UsuarioController {
         include "view/login.php";
     }
 
+    /**
+     * chama a funcao getStatsForUserRecipes depois carrega a tela principal
+     */
     public function principal() {
+        if (!isset($_SESSION['id'])) {
+            header("Location: index.php?action=formLogin&erro=2");
+            exit;
+        }
+
+        $swipeDAO = new SwipeDAO();
+        
+        $stats = $swipeDAO->getStatsForUserRecipes($_SESSION['id'], 10);
+        
+        $topLikes = $stats['top_likes'];
+        $topDislikes = $stats['top_dislikes'];
+        
         include "view/principal.php";
     }
 

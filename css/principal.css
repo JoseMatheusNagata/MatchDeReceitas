@@ -1,0 +1,63 @@
+body {
+        /* Garante que o conteúdo não fique escondido atrás do header fixo */
+        padding-top: 100px; 
+    }
+    .container-principal {
+        max-width: 1200px;
+        margin: 20px auto;
+        padding: 20px;
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        font-family: Arial, sans-serif;
+    }
+    .stats-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 30px;
+        justify-content: space-around;
+        margin-top: 20px;
+    }
+    .stats-table {
+        flex: 1;
+        min-width: 400px; 
+    }
+    .stats-table h2 {
+        text-align: center;
+        color: #333;
+        border-bottom: 2px solid #eee;
+        padding-bottom: 10px;
+    }
+    .stats-table table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 15px;
+    }
+    .stats-table th, .stats-table td {
+        border: 1px solid #ddd;
+        padding: 10px;
+        text-align: left;
+    }
+    .stats-table th {
+        background-color: #f9f9f9;
+        font-weight: bold;
+    }
+    .stats-table tr:nth-child(even) {
+        background-color: #fdfdfd;
+    }
+    .stats-table .count-like {
+        color: #5cb85c; /* Verde */
+        font-weight: bold;
+        text-align: center;
+    }
+    .stats-table .count-dislike {
+        color: #d9534f; /* Vermelho */
+        font-weight: bold;
+        text-align: center;
+    }
+    .no-data {
+        text-align: center;
+        color: #777;
+        padding: 20px;
+        font-style: italic;
+    }

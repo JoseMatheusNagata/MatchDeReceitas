@@ -165,5 +165,52 @@ class SwipeDAO {
             return [];
         }
     }
+
+    /**
+     * busca likes e dislikes
+     */
+    public function getStatsForUserRecipes($id_usuario, $limit = 10) {
+        global $pdo;
+        $stats = [
+            'top_likes' => [],
+            'top_dislikes' => []
+        ];
+
+        try {
+            $sql_likes = "SELECT r.titulo, COUNT(s.id_receita) AS total_count
+                          FROM receita r
+                          JOIN swipe s ON r.id = s.id_receita
+                          WHERE r.usuario_id = :id_usuario AND s.status = 'like'
+                          GROUP BY r.id, r.titulo
+                          ORDER BY total_count DESC
+                          LIMIT :limit_val";
+            
+            $stmt_likes = $pdo->prepare($sql_likes);
+            $stmt_likes->bindParam(':id_usuario', $id_usuario, PDO::PARAM_INT);
+            $stmt_likes->bindParam(':limit_val', $limit, PDO::PARAM_INT);
+            $stmt_likes->execute();
+            $stats['top_likes'] = $stmt_likes->fetchAll(PDO::FETCH_ASSOC);
+
+            $sql_dislikes = "SELECT r.titulo, COUNT(s.id_receita) AS total_count
+                             FROM receita r
+                             JOIN swipe s ON r.id = s.id_receita
+                             WHERE r.usuario_id = :id_usuario AND s.status = 'dislike'
+                             GROUP BY r.id, r.titulo
+                             ORDER BY total_count DESC
+                             LIMIT :limit_val";
+                             
+            $stmt_dislikes = $pdo->prepare($sql_dislikes);
+            $stmt_dislikes->bindParam(':id_usuario', $id_usuario, PDO::PARAM_INT);
+            $stmt_dislikes->bindParam(':limit_val', $limit, PDO::PARAM_INT);
+            $stmt_dislikes->execute();
+            $stats['top_dislikes'] = $stmt_dislikes->fetchAll(PDO::FETCH_ASSOC);
+            
+            return $stats;
+
+        } catch (PDOException $e) {
+            error_log("Erro ao buscar estatísticas de receitas do usuário: " . $e->getMessage());
+            return $stats; 
+        }
+    }
 }
 ?>
