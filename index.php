@@ -123,8 +123,14 @@ switch ($action) {
         </head>
     <body>
         <header>
-            <h2 class="logo"><img class="imgLogin" src="./img/logo1.png" alt=""></h2>
+            <?php if (isset($_SESSION['id'])): ?>
+                <button class="menu-toggle" id="menu-toggle-btn">&#9776; </button>
+            <?php endif; ?>   
+            
             <nav class="navigation">
+                <?php if (isset($_SESSION['id'])): ?>
+                    <a class="btnNav" href="index.php?action=principal">Home</a>
+                <?php endif; ?> 
                 <?php if (isset($_SESSION['id'])): ?>
                     <a class="btnNav" href="index.php?action=criarReceitas">Criar Receitas</a>
                 <?php endif; ?>   
@@ -180,3 +186,9 @@ switch ($action) {
         </header>
     </body>
 </html>
+<script>
+    document.getElementById('menu-toggle-btn').addEventListener('click', function() {
+        document.querySelector('.navigation').classList.toggle('nav-open');
+    });
+</script>
+

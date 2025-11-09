@@ -1,3 +1,4 @@
+/* estilo para mobile primeiro */
 * {
     margin: 0;
     padding: 0;
@@ -14,91 +15,107 @@ body {
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
+    padding-top: 80px; 
 }
-header{
+
+header {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
-    padding: 20px 100px;
+    padding: 15px 20px; 
     background: transparent;
     backdrop-filter: blur(15px);
     display: flex;
     justify-content: space-between;
     align-items: center;
     z-index: 99;
-
 }
 
-.group-btn{
+.logo {
+    z-index: 101;
+}
+
+
+.menu-toggle {
+    display: block; 
+    background: none;
+    border: none;
+    color: white;
+    font-size: 28px;
+    cursor: pointer;
+    z-index: 101;
+}
+
+.navigation {
+    display: none;
+    flex-direction: column; 
+    width: 100%;
+    position: absolute; 
+    top: 0;
+    left: 0;
+    padding-top: 80px; 
+    background: rgba(0,0,0,0.8); 
+    backdrop-filter: blur(10px);
+}
+
+.navigation.nav-open {
+    display: flex;
+}
+
+.btnNav {
+    background-image: linear-gradient(to right, red, green);
+    width: 100%; 
+    border-radius: 0; 
+    padding: 20px;
+    color: white;
+    border: 0;
+    outline: 0;
+    text-align: center;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    text-decoration: none;
+}
+
+.btnNav:hover {
+    background-image: linear-gradient(to right, rgb(143, 0, 0), rgb(2, 133, 2));
+}
+
+.group-btn {
     display: flex; 
 } 
 
-.btnLogIn{
+.btnLogIn, .btnLogout {
     background-image: linear-gradient(to right, red, green);
-    width: 10%;
+    width: auto;
     border-radius: 30px;
-    padding: 15px;
-    color:white;
-    border: 0px;
-    outline: 0px;
+    padding: 10px 20px;
+    color: white;
+    border: 0;
+    outline: 0;
     text-align: center;
+    text-decoration: none;
 }
 
-.btnLogout{
-    background-image: linear-gradient(to right, red, green);
-    width: 10%;
-    border-radius: 30px;
-    padding: 15px;
-    color:white;
-    border: 0px;
-    outline: 0px;
-        text-align: center;
-
-}
-
-.imgLogin{
-    border-radius: 50px;
-    width: 50px;
-    box-shadow: 0px 0px 5px #cc4141;
-}
-
-.btnNav{
-    background-image: linear-gradient(to right, red, green);
-    width: 10%;
-    border-radius: 30px;
-    padding: 15px;
-    color:white;
-    border: 0px;
-    outline: 0px;
-    text-align: center;
-
-}
-
-nav a:hover{
+.btnLogIn:hover, .btnLogout:hover {
     background-image: linear-gradient(to right, rgb(143, 0, 0), rgb(2, 133, 2));
-
-}
-
-.btnLogIn, .btnLogout:hover{
-    background-image: linear-gradient(to right, rgb(143, 0, 0), rgb(2, 133, 2));
-
 }
 
 .foto-perfil {
-    width: 50px;
-    height: 50px;
+    width: 45px;
+    height: 45px;
     border-radius: 50%;
     object-fit: cover;
-    border: 3px solid #ccc;
+    border: 2px solid #ccc;
+    margin-left: 15px;
 }
 
-/* ESTILOS PARA A NOTIFICAÇÃO */
 .alert-notification {
     position: fixed;
     top: 90px; 
     left: 50%;
     transform: translateX(-50%);
+    width: 90%;
+    max-width: 500px;
     padding: 15px 25px;
     border-radius: 8px;
     background-color: #5cb85c;
@@ -108,4 +125,37 @@ nav a:hover{
     box-shadow: 0 4px 8px rgba(0,0,0,0.2);
     opacity: 1;
     transition: opacity 0.5s ease-in-out;
+}
+
+@media (min-width: 768px) {
+
+    body {
+        padding-top: 100px; 
+    }
+
+    header {
+        padding: 20px 100px; 
+    }
+
+    .menu-toggle {
+        display: none;
+    }
+
+    .navigation {
+        display: flex;
+        flex-direction: row; 
+        position: static; 
+        width: auto; 
+        background: transparent;
+        backdrop-filter: none;
+        padding-top: 0;
+    }
+
+    .btnNav {
+        width: auto; 
+        border-radius: 30px;
+        padding: 15px;
+        border-bottom: 0;
+        margin-left: 10px;
+    }
 }
