@@ -70,9 +70,6 @@ switch ($action) {
     case 'alterarStatusSwipe': 
         $controllerSwipe->alterarStatusSwipe();
         break;
-    case 'carregarReceitas':
-        $controllerSwipe->carregarReceitas();
-        break;
     
     case 'minhasReceitas':
         $controllerReceita->minhasReceitas();
