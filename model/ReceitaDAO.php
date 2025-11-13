@@ -143,5 +143,64 @@ class ReceitaDAO {
             return [];
         }
     }
-}
+
+    /**
+     * Busca uma receita específica pelo ID e seus ingredientes,
+     * garantindo que ela pertença ao usuário logado.
+     */
+    public function getReceitaById($id_receita, $id_usuario) {
+        global $pdo;
+        try {
+            $sql = "SELECT * FROM receita WHERE id = :id_receita AND usuario_id = :id_usuario";
+            $stmt = $pdo->prepare($sql);
+            $stmt->bindParam(':id_receita', $id_receita, PDO::PARAM_INT);
+            $stmt->bindParam(':id_usuario', $id_usuario, PDO::PARAM_INT);
+            $stmt->execute();
+            
+            $receita = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            if (!$receita) {
+                return null;
+            }
+
+            // busca os ingredientes
+            $sql_ing = "SELECT i.id, i.nome, ri.quantidade 
+                        FROM receita_ingrediente ri
+                        JOIN ingrediente i ON ri.id_ingrediente = i.id
+                        WHERE ri.id_receita = :id_receita";
+            
+            $stmt_ing = $pdo->prepare($sql_ing);
+            $stmt_ing->bindParam(':id_receita', $id_receita, PDO::PARAM_INT);
+            $stmt_ing->execute();
+            
+            $receita['ingredientes'] = $stmt_ing->fetchAll(PDO::FETCH_ASSOC);
+            
+            return $receita;
+
+        } catch (PDOException $e) {
+            error_log("Erro ao buscar receita por ID: " . $e->getMessage());
+            return null;
+        }
+    }
+
+    public function atualizarReceitaCompleta(Receita $receita, array $ingredientes, array $quantidades) {
+        global $pdo;
+        try {
+            $pdo->beginTransaction();
+
+
+
+
+
+
+
+
+        } catch (PDOException $th) {
+            $pdo->rollBack(); 
+            error_log("Erro ao atualizar receita: " . $e->getMessage());
+            return false;        
+        }
+    }
+
+}      
 ?>

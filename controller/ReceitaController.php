@@ -116,7 +116,29 @@ class ReceitaController {
 
         // Pede ao Model a lista de tipos de receita
         $tiposReceita = $this->dao->getAllTiposReceitas();
-        // Carrega a View e passa os dados para ela
+
+        $receita = null;
+        $ingredientesDaReceita = [];
+        $modo = 'criar';
+
+        if (isset($_GET['id']) && isset($_SESSION['id'])) {
+            $id_receita = $_GET['id'];
+            $id_usuario = $_SESSION['id'];
+            
+            //busca a receita do usuario
+            $receita = $this->dao->getReceitaById($id_receita, $id_usuario);
+            
+            // Se a receita foi encontrada e pertence ao usuário
+            if ($receita) {
+                $modo = 'editar';
+                $ingredientesDaReceita = $receita['ingredientes'];
+            } else {
+                $_SESSION['alert_message'] = "Receita não encontrada.";
+                header("Location: index.php?action=minhasReceitas");
+                exit;
+            }
+        }
+
         require __DIR__ . '/../view/criar_receitas.php';
     }
 
@@ -157,5 +179,47 @@ class ReceitaController {
         echo json_encode($resultados);
         exit();
     }
+
+    /** ===========================
+     * atualiza a receita
+     * =========================== */
+     public function atualizarReceita(){
+        $this->checkCsrf();
+        
+        if (!isset($_SESSION['id']) || !isset($_POST['id_receita'])) {
+            header("Location: index.php?action=formLogin&erro=2");
+            exit;
+        }
+
+        $imagemBlob = null;
+        if (isset($_FILES['imagem']) && $_FILES['imagem']['error'] === UPLOAD_ERR_OK) {
+            $caminhoTemporario = $_FILES['imagem']['tmp_name'];
+            $imagemBlob = file_get_contents($caminhoTemporario);
+        }
+
+        $receita = new Receita(
+            $_POST['id_receita'],
+            $_SESSION['id'],
+            $_POST['id_tipo_receita'],
+            $_POST['titulo'],
+            $_POST['descricao'],
+            $imagemBlob, 
+            $_POST['tempo_preparo'],
+            null
+        );
+
+        $ingredientes = $_POST['ingrediente'] ?? [];
+        $quantidades = $_POST['quantidade'] ?? [];
+
+        if($this->dao->atualizarReceitaCompleta($receita, $ingredientes, $quantidades)) {
+            $_SESSION['alert_message'] = "Receita atualizada com sucesso!";
+        } else {
+            $_SESSION['alert_message'] = "Erro ao atualizar a receita.";
+        }
+        
+        header("Location: index.php?action=minhasReceitas");
+        exit();
+    }
+
 }
 ?>

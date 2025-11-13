@@ -63,6 +63,10 @@ switch ($action) {
         $controllerReceita->adicionarReceita();
         break;
 
+    case 'atualizarReceita':
+        $controllerReceita->atualizarReceita();
+        break;    
+
     case 'meusSwipes':
         $controllerSwipe->meusSwipes();
         break;  
@@ -188,4 +192,3 @@ switch ($action) {
         document.querySelector('.navigation').classList.toggle('nav-open');
     });
 </script>
-
