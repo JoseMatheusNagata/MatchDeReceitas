@@ -99,7 +99,7 @@ class ReceitaDAO {
      */
       public function getAllReceitasByUsuario() {
         global $pdo;
-        $stmt = $pdo->query("SELECT Titulo from receita where usuario_id = $_SESSION[id]");
+        $stmt = $pdo->query("SELECT id , Titulo from receita where usuario_id = $_SESSION[id]");
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
     /**

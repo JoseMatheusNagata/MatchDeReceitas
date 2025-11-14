@@ -27,22 +27,22 @@
     </div>
 
     <div class="form-container">
-        <h2>Criar Nova Receita</h2>
+        <h2><?= !empty($receita)? 'Editar Receita' : 'Nova Receita' ?></h2>
         <form action="index.php?action=adicionarReceita" method="POST" enctype="multipart/form-data">
 
             <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($_SESSION['csrf_token']) ?>">
 
             <div class="form-group">
                 <label for="titulo">Título da Receita:</label>
-                <input type="text" id="titulo" name="titulo" required>
+                <input type="text" id="titulo" name="titulo" value="<?= htmlspecialchars($receita['titulo'] ?? '') ?>" required>
             </div>
             <div class="form-group">
                 <label for="descricao">Descrição (Modo de Preparo):</label>
-                <textarea id="descricao" name="descricao"></textarea>
+                <textarea id="descricao" name="descricao"><?= htmlspecialchars($receita['descricao'] ?? '') ?></textarea>
             </div>
             <div class="form-group">
                 <label for="tempo_preparo">Tempo de Preparo:</label>
-                <input type="text" id="tempo_preparo" name="tempo_preparo" placeholder="Ex: 45 minutos">
+                <input type="text" id="tempo_preparo" name="tempo_preparo" placeholder="Ex: 45 minutos" >
             </div>
             <div class="form-group">
                 <label for="id_tipo_receita">Tipo de Receita (Categoria):</label>
@@ -70,7 +70,7 @@
                         <input type="text" id="ingrediente-search" class="ingrediente-search" 
                                placeholder="Digite 2+ letras para buscar..." 
                                onkeyup="buscarIngrediente()" autocomplete="off">
-                        
+                              
                         <div id="ingrediente-search-results"></div>
 
                         <input type="hidden" id="selected-ingrediente-id">
