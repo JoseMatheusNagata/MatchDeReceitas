@@ -12,7 +12,7 @@
         <h1>Meus Matches</h1>
 
         <form method="GET" action="index.php">
-            <input type="hidden" name="action" value="meusMatches">
+            <input type="hidden" name="action" value="meusSwipes"> 
             <div class="filter-container">
                 <label for="titulo">Buscar por nome:</label>
                 <input type="text" name="titulo" id="titulo" placeholder="Digite o nome da receita" value="<?= htmlspecialchars($titulo_filtro ?? '') ?>">
