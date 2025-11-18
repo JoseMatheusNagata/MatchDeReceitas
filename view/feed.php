@@ -5,11 +5,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Feed de Receitas</title>
-    <link rel="stylesheet" href="./css/meus_swipes.css">
+    <link rel="stylesheet" href="./css/feed.css">
 </head>
 <body>
 <div class="container">
     <h1>Feed de Receitas</h1>
+    
     <div class="receitas-viewer">
         <?php if (!empty($listaFeed)): ?>
             <div id="receitas-container">
@@ -24,8 +25,12 @@
                         <div class="receita-content">
                             <h2><?= htmlspecialchars($item->titulo) ?></h2>
 
+                            <?php if (!empty($item->tipo_receita)): ?>
+                                <p style="color: #888; font-size: 0.9em; margin-bottom: 5px;"><?= htmlspecialchars($item->tipo_receita) ?></p>
+                            <?php endif; ?>
+
                             <?php if (!empty($item->tempo_preparo)): ?>
-                                <p class="tempo-preparo"><strong>Tempo de Preparo:</strong> <?= htmlspecialchars($item->tempo_preparo) ?></p>
+                                <p class="tempo-preparo">⏱ <strong>Tempo:</strong> <?= htmlspecialchars($item->tempo_preparo) ?></p>
                             <?php endif; ?>
 
                             <?php if (!empty($item->descricao)): ?>
@@ -39,22 +44,27 @@
                         <form action="index.php?action=salvarSwipe" method="post">
                             <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($_SESSION['csrf_token']) ?>">
                             <input type="hidden" name="id_receita" value="<?= htmlspecialchars($item->id) ?>">
-                        
-                            <button type="submit" name="acao" value="like">Like</button>
-                            <button type="submit" name="acao" value="dislike">Dislike</button>
                             
+                            <div class="action-buttons">
+                                <button type="submit" name="acao" value="dislike" class="btn btn-dislike">
+                                    ✖ Dislike
+                                </button>
+                                <button type="submit" name="acao" value="like" class="btn btn-like">
+                                    ❤ Like
+                                </button>
+                            </div>
                         </form>
-                        
-       
                     </div>
                 <?php endforeach; ?>
             </div>
         <?php else: ?>
-            <p>Nenhuma nova receita encontrada no feed.</p>
+            <div style="text-align: center; padding: 50px;">
+                <p>Você já viu todas as receitas disponíveis no momento!</p>
+                <a href="index.php?action=meusSwipes" style="color: #5cb85c; text-decoration: none; font-weight: bold;">Ver meus matches</a>
+            </div>
         <?php endif; ?>
     </div>
 </div>
-</body>
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {

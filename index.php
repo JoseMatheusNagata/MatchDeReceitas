@@ -137,7 +137,7 @@ switch ($action) {
                 <?php endif; ?>   
        
                 <?php if (isset($_SESSION['id'])): ?>
-                    <a class="btnNav" href="index.php?action=meusSwipes">Meus Swipes</a>
+                    <a class="btnNav" href="index.php?action=meusSwipes">Meus Matches</a>
                 <?php endif; ?>
                 <?php if (isset($_SESSION['id'])): ?>
                     <a class="btnNav" href="index.php?action=carregarFeed">Feed</a>

@@ -4,15 +4,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Meus Swipes</title>
+    <title>Meus Matches</title>
     <link rel="stylesheet" href="./css/meus_swipes.css">
 </head>
 <body>
     <div class="container">
-        <h1>Meus Swipes</h1>
+        <h1>Meus Matches</h1>
 
         <form method="GET" action="index.php">
-            <input type="hidden" name="action" value="meusSwipes">
+            <input type="hidden" name="action" value="meusMatches">
             <div class="filter-container">
                 <label for="titulo">Buscar por nome:</label>
                 <input type="text" name="titulo" id="titulo" placeholder="Digite o nome da receita" value="<?= htmlspecialchars($titulo_filtro ?? '') ?>">
