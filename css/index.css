@@ -120,13 +120,12 @@ header {
 }
 
 .foto-perfil {
-    width: 45px;
-    height: 45px;
+    width: 60px; 
+    height: 60px;
     border-radius: 50%;
     object-fit: cover;
     border: 2px solid #ccc;
-    margin-left: 15px; /* Mantém a margem do lado da foto */
-    /* Garante que a foto não seja espremida */
+    margin-left: 15px; 
     flex-shrink: 0;
 }
 
@@ -170,12 +169,10 @@ header {
         background: transparent;
         backdrop-filter: none;
         padding-top: 0;
-        /* Garante que o menu e o grupo de usuário se separem */
         flex-grow: 1; 
         justify-content: flex-start;
     }
     
-    /* Em desktop, o grupo de usuário volta a ter layout flexível */
     .user-info-group {
         flex-shrink: 1;
         justify-content: flex-end; 
