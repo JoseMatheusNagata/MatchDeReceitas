@@ -152,20 +152,21 @@ switch ($action) {
                 <?php endif; ?>
             </nav>
             
-            <?php if (isset($_SESSION['id'])): ?>
-                <p>Olá, <?php echo $_SESSION['nome'] ?>!</p>
-                <a href="index.php?action=logout" class="btnLogout">Logout</a>
-                <?php else : ?>
-                    <a href="index.php?action=formLogin" class="btnLogIn">Login</a>
-            <?php endif; ?>
+            <div class="user-info-group">
+                <?php if (isset($_SESSION['id'])): ?>
+                    <p>Olá, <?php echo $_SESSION['nome'] ?>!</p>
+                    <a href="index.php?action=logout" class="btnLogout">Logout</a>
+                    <?php else : ?>
+                        <a href="index.php?action=formLogin" class="btnLogIn">Login</a>
+                <?php endif; ?>
 
-            <?php
-                if (isset($_SESSION['foto_perfil']) && !empty($_SESSION['foto_perfil'])) {
-                    echo '<img class="foto-perfil" src="' . $_SESSION['foto_perfil'] . '" alt="Foto de Perfil">';
-                } else {
-            }   
-            ?>
-
+                <?php
+                    if (isset($_SESSION['foto_perfil']) && !empty($_SESSION['foto_perfil'])) {
+                        echo '<img class="foto-perfil" src="' . $_SESSION['foto_perfil'] . '" alt="Foto de Perfil">';
+                    } else {
+                }   
+                ?>
+            </div>
             <?php if (isset($_SESSION['alert_message'])): ?>
                 <div id="alert-notification" class="alert-notification">
                     <?php echo $_SESSION['alert_message']; ?>

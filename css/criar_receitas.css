@@ -3,7 +3,7 @@ body {
     background-color: #f4f4f4; 
     margin: 0; 
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     justify-content: center;
     min-height: 100vh;
     padding-top: 100px; 
@@ -15,10 +15,11 @@ body {
     padding: 30px; 
     border-radius: 8px; 
     box-shadow: 0 4px 8px rgba(0,0,0,0.1); 
-    width: 800px;     
+    max-width: 800px;
+    width: 95%;
     margin: auto; 
     margin-bottom: 20px; 
-    height: 75vh;      
+    height: auto;
     overflow-y: auto; 
 }
 h2 { 
@@ -57,13 +58,14 @@ textarea {
 }
 .ingredient-row { 
     display: flex; 
-    gap: 10px; 
+    flex-wrap: wrap;
+    gap: 0;
     margin-bottom: 10px; 
     align-items: flex-end; 
 }
 .ingredient-row .form-group {
-     flex: 1; 
-     margin-bottom: 0;
+     flex: 1 1 100%;
+     margin-bottom: 10px;
      }
 .btn { 
     padding: 10px 15px; 
@@ -114,7 +116,7 @@ textarea {
     margin: 15% auto;
     padding: 20px;
     border: 1px solid #888;
-    width: 90%;
+    width: 90%; 
     max-width: 500px;
     border-radius: 8px;
     position: relative;
@@ -122,8 +124,8 @@ textarea {
 }
 
 #form-custom { 
-    width: 400px;     
-    height: 180px;
+    width: 100%; 
+    height: auto;
 }
 
 .close-btn {
@@ -142,12 +144,13 @@ textarea {
 /* ESTILOS PARA O GRUPO DE BOTÕES */
 .button-group {
     display: flex; 
+    flex-wrap: wrap;
     gap: 10px;
     margin-bottom: 20px;
 }
 
 .button-group .btn {
-    flex: 1;
+    flex: 1 1 100%;
 }
 
 .btn-new {
@@ -199,4 +202,19 @@ textarea {
 
 .search-result-item:hover {
     background-color: #f5f5f5;
+}
+
+
+@media (min-width: 768px) {
+    .ingredient-row { 
+        flex-wrap: nowrap; 
+        gap: 10px;
+    }
+    .ingredient-row .form-group {
+        flex: 1; 
+        margin-bottom: 0;
+    }
+    .button-group .btn {
+        flex: 1;
+    }
 }

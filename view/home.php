@@ -55,9 +55,9 @@
 
     </div>
 
-    <footer style="text-align: center; padding: 20px; margin-top: 40px; border-top: 1px solid #eee;">
+    <footer class="site-footer-home">
         <p>&copy; <?= date("Y") ?> Match de Receitas. Todos os direitos reservados.</p>
-    </footer> 
+    </footer>
 
 </body>
 </html>

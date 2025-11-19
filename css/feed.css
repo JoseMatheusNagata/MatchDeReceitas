@@ -3,17 +3,26 @@ body {
     background-color: #f4f4f4;
     margin: 0;
     padding: 20px;
-    padding-top: 120px;
+    padding-top: 120px; 
+
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh; 
+    box-sizing: border-box;
 }
 
 .container {
     min-width: 300px;
     max-width: 800px;
-    margin: auto;
+    /* margin: auto centraliza e o flex: 1 empurra o footer para baixo */
+    margin: 0 auto; 
     background-color: #fff;
     padding: 30px;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    width: 100%; /* Garante que o container ocupe o espaço disponível até o max-width */
+    flex: 1; /* Faz o container crescer para ocupar espaço vazio */
+    margin-bottom: 30px; /* Espaço entre o container e o footer */
 }
 
 h1 {
@@ -22,15 +31,18 @@ h1 {
     margin-bottom: 20px;
 }
 
+/* Estilo do Cartão de Receita */
 .receita-card {
     border: 1px solid #ddd;
     border-radius: 8px;
     overflow: hidden;
     box-shadow: 0 2px 5px rgba(0,0,0,0.1);
     background: white;
+    /* Importante para o JS de navegação funcionar corretamente */
     display: none; 
 }
 
+/* A primeira receita deve aparecer por defeito (fallback caso o JS falhe) */
 .receita-card:first-child {
     display: block;
 }
@@ -68,6 +80,7 @@ h1 {
     color: #444;
 }
 
+/* Área dos Botões de Ação (Like/Dislike) */
 .action-buttons {
     padding: 20px;
     display: flex;
@@ -78,10 +91,10 @@ h1 {
 }
 
 .btn {
-    flex: 1; 
+    flex: 1; /* Faz os botões ocuparem o mesmo tamanho */
     padding: 15px;
     border: none;
-    border-radius: 30px;
+    border-radius: 30px; /* Botões arredondados estilo app */
     color: white;
     font-weight: bold;
     cursor: pointer;
@@ -107,6 +120,7 @@ h1 {
     background-image: linear-gradient(to right, #d9534f, #c9302c);
 }
 
+/* Navegação (Anterior/Próxima) */
 .navigation-controls {
     display: flex;
     justify-content: space-between;
@@ -133,4 +147,18 @@ h1 {
 #receita-counter {
     font-weight: bold;
     color: #555;
+}
+
+/* Estilo do Novo Footer */
+.site-footer {
+    text-align: center;
+    padding: 20px;
+    color: #666;
+    border-top: 1px solid #ddd;
+    font-size: 0.9em;
+    width: 100%;
+    /* Garante que o footer fique centralizado visualmente */
+    align-self: center; 
+    max-width: 800px; /* Alinha com o max-width do container para centrar */
+    margin: 0 auto;
 }

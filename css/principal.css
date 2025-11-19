@@ -1,5 +1,4 @@
 body {
-        /* Garante que o conteúdo não fique escondido atrás do header fixo */
         padding-top: 100px; 
     }
     .container-principal {
@@ -19,19 +18,21 @@ body {
         margin-top: 20px;
     }
     .stats-table {
-        flex: 1;
-        min-width: 400px; 
+        flex: 1 1 100%; 
+        min-width: unset; 
+    }
+    .stats-table table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 15px;
+        display: block; 
+        overflow-x: auto;
     }
     .stats-table h2 {
         text-align: center;
         color: #333;
         border-bottom: 2px solid #eee;
         padding-bottom: 10px;
-    }
-    .stats-table table {
-        width: 100%;
-        border-collapse: collapse;
-        margin-top: 15px;
     }
     .stats-table th, .stats-table td {
         border: 1px solid #ddd;
@@ -61,3 +62,10 @@ body {
         padding: 20px;
         font-style: italic;
     }
+
+@media (min-width: 768px) {
+    .stats-table {
+        flex: 1;
+        min-width: 400px;
+    }
+}
