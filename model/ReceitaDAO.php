@@ -187,18 +187,61 @@ class ReceitaDAO {
         global $pdo;
         try {
             $pdo->beginTransaction();
+               $idUsuarioLogado = $_SESSION['id'];
+            // validação mínima
+            if (empty($receita->id)) {
+                $pdo->rollBack();
+                error_log('Erro ao atualizar receita: id da receita não fornecido.');
+                return false;
+            }
 
+            // Se foi enviada uma nova imagem, atualiza o campo 'imagem'. Caso contrário, preserva a imagem existente.
+            if (!empty($receita->imagem)) {
+                $sql = "UPDATE receita SET usuario_id = ?, id_tipo_receita = ?, titulo = ?, descricao = ?, imagem = ?, tempo_preparo = ? WHERE id = ?";
+                $params = [
+                    $idUsuarioLogado,
+                    $receita->id_tipo_receita,
+                    $receita->titulo,
+                    $receita->descricao,
+                    $receita->imagem,
+                    $receita->tempo_preparo,
+                    $receita->id,
+                ];
+            } else {
+                // não atualizar a coluna imagem
+                $sql = "UPDATE receita SET usuario_id = ?, id_tipo_receita = ?, titulo = ?, descricao = ?, tempo_preparo = ? WHERE id = ?";
+                $params = [
+                    $idUsuarioLogado,
+                    $receita->id_tipo_receita,
+                    $receita->titulo,
+                    $receita->descricao,
+                    $receita->tempo_preparo,
+                    $receita->id,
+                ];
+            }
 
+            $stmt = $pdo->prepare($sql);
+            $stmt->execute($params);
 
+            $id_receita = $receita->id;
 
+            // Remove associações antigas e insere as novas quantidades/ingredientes
+            $del = $pdo->prepare("DELETE FROM receita_ingrediente WHERE id_receita = ?");
+            $del->execute([$id_receita]);
 
+            foreach ($ingredientes as $key => $id_ingrediente) {
+                if (!empty($id_ingrediente) && isset($quantidades[$key])) {
+                    $this->inserirIngredientesDaReceita($id_receita, $id_ingrediente, $quantidades[$key]);
+                }
+            }
 
+            $pdo->commit();
+            return true;
 
-
-        } catch (PDOException $th) {
-            $pdo->rollBack(); 
+        } catch (PDOException $e) {
+            $pdo->rollBack();
             error_log("Erro ao atualizar receita: " . $e->getMessage());
-            return false;        
+            return false;
         }
     }
 
