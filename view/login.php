@@ -11,7 +11,7 @@
     <form class="form" action="index.php?action=validaLogin" method="POST">
         <div class="card">
             <div class="card-top">
-                <img class="imgLogin" src="./img/tinder.png" alt="">
+                <img class="imgLogin" src="./img/logo_texto.png" alt="">
                 <h2 class="title">Match de Receitas</h2>
                 <p>Receitas na palma da sua mão!</p>
             </div>

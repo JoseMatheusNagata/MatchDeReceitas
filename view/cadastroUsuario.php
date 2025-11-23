@@ -13,7 +13,7 @@
             
             <div class="card">
                 <div class="card-top">
-                    <img class="imgLogin" src="./img/tinder.png" alt="">
+                    <img class="imgLogin" src="./img/logo_texto.png" alt="">
                 </div>
             
                 <h2>Cadastrar Usuário</h2>

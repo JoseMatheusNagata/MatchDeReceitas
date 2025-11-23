@@ -1,8 +1,8 @@
 
 body {
     font-family: Arial, sans-serif;
-    background-color: #f9f9f9;
-    color: #333;
+
+    color: white;
     margin: 0;
     padding-top: 80px;
     min-height: 100vh; 
@@ -74,7 +74,7 @@ body {
 }
 
 .feature-item h3 {
-    color: #d9534f;
+    color: #333;
     margin-top: 0;
     font-size: 1.4rem;
 }
@@ -82,6 +82,7 @@ body {
 .feature-item p {
     font-size: 1rem;
     line-height: 1.5;
+    color: #333;
 }
 
 /* Seção Top 5 Receitas */
@@ -125,7 +126,7 @@ body {
     padding: 15px;
     margin: 0;
     font-size: 1rem;
-    color: #555;
+    color: #333;
 }
 
 .site-footer-home {
@@ -135,7 +136,7 @@ body {
     margin-top: 40px; 
     border-top: 1px solid #eee;
     font-size: 0.85rem;
-    color: #777;
+    color: white;
     box-sizing: border-box; 
     flex-shrink: 0; 
 }
