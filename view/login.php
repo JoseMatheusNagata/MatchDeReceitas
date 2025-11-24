@@ -51,5 +51,8 @@
             </div>
         </div>
     </form>
+    <?php
+        include "view/footer.php";
+    ?>
 </body>
 </html>

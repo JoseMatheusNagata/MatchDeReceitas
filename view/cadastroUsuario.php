@@ -50,5 +50,8 @@
         </form>
         
     </main>
+    <?php
+        include "view/footer.php";
+    ?>
 </body>
 </html>

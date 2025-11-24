@@ -2,9 +2,7 @@ body {
     font-family: Arial, sans-serif;
     background-color: #f4f4f4;
     margin: 0;
-    padding: 20px;
     padding-top: 120px; 
-
     display: flex;
     flex-direction: column;
     min-height: 100vh; 
@@ -14,15 +12,13 @@ body {
 .container {
     min-width: 300px;
     max-width: 800px;
-    /* margin: auto centraliza e o flex: 1 empurra o footer para baixo */
-    margin: 0 auto; 
+    margin: 0 auto 30px auto; 
+    width: 90%;
     background-color: #fff;
     padding: 30px;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-    width: 100%; /* Garante que o container ocupe o espaço disponível até o max-width */
-    flex: 1; /* Faz o container crescer para ocupar espaço vazio */
-    margin-bottom: 30px; /* Espaço entre o container e o footer */
+    flex: 1; 
 }
 
 h1 {

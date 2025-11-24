@@ -55,9 +55,10 @@
 
     </div>
 
-    <footer class="site-footer-home">
-        <p>&copy; <?= date("Y") ?> Match de Receitas. Todos os direitos reservados.</p>
-    </footer>
+    <?php
+        include "view/footer.php";
+    ?>
+
 
 </body>
 </html>

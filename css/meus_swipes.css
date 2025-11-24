@@ -2,20 +2,23 @@ body {
     font-family: Arial, sans-serif;
     background-color: #f4f4f4;
     margin: 0;
-    padding: 20px;
     padding-top: 120px; 
-    height: auto; 
-    overflow-y: visible;
-
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh; 
+    box-sizing: border-box;
 }
+
 .container {
-    min-width: unset; 
-    max-width: 1200px;
-    margin: auto;
+    min-width: 300px;
+    max-width: 800px;
+    margin: 0 auto 30px auto; 
+    width: 90%;
     background-color: #fff;
     padding: 30px;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    flex: 1; 
 }
 h1 {
     text-align: center;

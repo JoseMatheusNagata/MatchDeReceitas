@@ -343,6 +343,8 @@ let debounceTimer;
     document.addEventListener('DOMContentLoaded', inicializarNavegacaoReceitas);
 
 </script>
-
+<?php
+    include "view/footer.php";
+?>
 </body>
 </html>

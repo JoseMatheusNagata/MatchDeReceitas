@@ -1,0 +1,453 @@
+SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
+SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
+SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION';
+
+-- -----------------------------------------------------
+-- Schema swipesdereceitas
+-- -----------------------------------------------------
+
+-- -----------------------------------------------------
+-- Schema swipesdereceitas
+-- -----------------------------------------------------
+CREATE SCHEMA IF NOT EXISTS `swipesdereceitas` DEFAULT CHARACTER SET utf8 ;
+USE `swipesdereceitas` ;
+
+-- -----------------------------------------------------
+-- Table `swipesdereceitas`.`usuario`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `swipesdereceitas`.`usuario` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `nome` VARCHAR(100) NOT NULL,
+  `email` VARCHAR(100) NOT NULL,
+  `senha` VARCHAR(200) NOT NULL,
+  `foto_perfil` MEDIUMBLOB NULL,
+  `data_cadastro` TIMESTAMP DEFAULT CURRENT_TIMESTAMP NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE INDEX `email_UNIQUE` (`email` ASC) VISIBLE)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `swipesdereceitas`.`tipo_receita`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `swipesdereceitas`.`tipo_receita` (
+  `id` INT NOT NULL,
+  `descricao` VARCHAR(45) NOT NULL,
+  PRIMARY KEY (`id`))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `swipesdereceitas`.`receita`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `swipesdereceitas`.`receita` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `usuario_id` INT NOT NULL,
+  `id_tipo_receita` INT NOT NULL,
+  `titulo` VARCHAR(100) NOT NULL,
+  `descricao` VARCHAR(3000) NOT NULL,
+  `imagem` MEDIUMBLOB NULL,
+  `tempo_preparo` VARCHAR(45) NULL,
+  `data_criacao` TIMESTAMP DEFAULT CURRENT_TIMESTAMP NULL,
+  PRIMARY KEY (`id`),
+  INDEX `fk_usuario_id_idx` (`usuario_id` ASC) VISIBLE,
+  INDEX `fk_tipo_receita_idx` (`id_tipo_receita` ASC) VISIBLE,
+  CONSTRAINT `fk_usuario_id`
+    FOREIGN KEY (`usuario_id`)
+    REFERENCES `swipesdereceitas`.`usuario` (`id`)
+    ON DELETE CASCADE
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_tipo_receita`
+    FOREIGN KEY (`id_tipo_receita`)
+    REFERENCES `swipesdereceitas`.`tipo_receita` (`id`)
+    ON DELETE RESTRICT
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `swipesdereceitas`.`ingrediente`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `swipesdereceitas`.`ingrediente` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `nome` VARCHAR(100) NOT NULL,
+  PRIMARY KEY (`id`))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `swipesdereceitas`.`receita_ingrediente`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `swipesdereceitas`.`receita_ingrediente` (
+  `id_receita` INT NOT NULL,
+  `id_ingrediente` INT NOT NULL,
+  `quantidade` VARCHAR(100) NULL,
+  PRIMARY KEY (`id_receita`, `id_ingrediente`),
+  INDEX `fk_ingrediente_id_idx` (`id_ingrediente` ASC) VISIBLE,
+  CONSTRAINT `fk_receita_id`
+    FOREIGN KEY (`id_receita`)
+    REFERENCES `swipesdereceitas`.`receita` (`id`)
+    ON DELETE CASCADE
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_ingrediente_id`
+    FOREIGN KEY (`id_ingrediente`)
+    REFERENCES `swipesdereceitas`.`ingrediente` (`id`)
+    ON DELETE CASCADE
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `swipesdereceitas`.`swipe`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `swipesdereceitas`.`swipe` (
+  `id_usuario` INT NOT NULL,
+  `id_receita` INT NOT NULL,
+  `status` ENUM('like', 'dislike') NOT NULL,
+  `data_interacao` TIMESTAMP DEFAULT CURRENT_TIMESTAMP NULL,
+  PRIMARY KEY (`id_usuario`, `id_receita`),
+  INDEX `fk_receita_id_idx` (`id_receita` ASC) VISIBLE,
+  CONSTRAINT `fk_swipe_usuario_id`
+    FOREIGN KEY (`id_usuario`)
+    REFERENCES `swipesdereceitas`.`usuario` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_swipe_receita_id`
+    FOREIGN KEY (`id_receita`)
+    REFERENCES `swipesdereceitas`.`receita` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+-- -----------------------------------------------------
+-- Table `swipesdereceitas`.`geladeira`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `swipesdereceitas`.`geladeira` (
+  `id_usuario` INT NOT NULL,
+  `id_ingrediente` INT NOT NULL,
+  `quantidade` VARCHAR(100) NULL DEFAULT NULL,
+  PRIMARY KEY (`id_usuario`, `id_ingrediente`),
+  INDEX `fk_id_ingrediente_idx` (`id_ingrediente` ASC) VISIBLE,
+  CONSTRAINT `fk_id_ingrediente`
+    FOREIGN KEY (`id_ingrediente`)
+    REFERENCES `swipesdereceitas`.`ingrediente` (`id`),
+  CONSTRAINT `fk_id_usuario`
+    FOREIGN KEY (`id_usuario`)
+    REFERENCES `swipesdereceitas`.`usuario` (`id`))
+ENGINE = InnoDB;
+
+
+SET SQL_MODE=@OLD_SQL_MODE;
+SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
+SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
+
+INSERT INTO `swipesdereceitas`.`tipo_receita` (`id`, `descricao`) VALUES ('1', 'Café da Manhã');
+INSERT INTO `swipesdereceitas`.`tipo_receita` (`id`, `descricao`) VALUES ('2', 'Almoço');
+INSERT INTO `swipesdereceitas`.`tipo_receita` (`id`, `descricao`) VALUES ('3', 'Lanche');
+INSERT INTO `swipesdereceitas`.`tipo_receita` (`id`, `descricao`) VALUES ('4', 'Janta');
+
+INSERT INTO `swipesdereceitas`.`usuario` (`id`, `nome`, `email`, `senha`) VALUES ('1', 'jose', 'jose@jose', '$2y$10$jPCwhadsUW82DtVGS/aNGeX3WC0k9T1Y7tOccZGDD59z44EJdVwZW');
+
+-- -----------------------------------------------------
+-- ADICIONANDO TODOS OS INGREDIENTES NECESSÁRIOS
+-- (Usando INSERT IGNORE para não dar erro se já existirem)
+-- -----------------------------------------------------
+INSERT IGNORE INTO `ingrediente` (`nome`) VALUES
+('Ovo'), ('Sal'), ('Cebola'), ('Calabresa'), ('Farinha de Trigo'), ('Açúcar'),
+('Leite'), ('Manteiga'), ('Fermento em pó'), ('Filé de Frango'), ('Arroz'),
+('Feijão'), ('Bife'), ('Alface'), ('Tomate'), ('Pão de forma'), ('Queijo mussarela'),
+('Presunto'), ('Atum enlatado'), ('Maionese'), ('Pão de hambúrguer'), ('Hambúrguer de carne'),
+('Macarrão espaguete'), ('Carne moída'), ('Molho de tomate'), ('Banana'), ('Aveia em flocos'),
+('Mel'), ('Peito de peru'), ('Pão sírio'), ('Iogurte natural'), ('Hortelã'),
+('Frutas vermelhas'), ('Granola'), ('Lasanha (massa)'), ('Queijo parmesão'),
+('Molho branco'), ('Salmão'), ('Batata'), ('Limão siciliano'), ('Azeite de Oliva'),
+('Massa de pizza'), ('Orégano'), ('Leite condensado'), ('Chocolate em pó'),
+('Chocolate granulado'), ('Biscoito maisena'), ('Limão'), ('Leite de coco'), 
+('Coco ralado'), ('Cenoura'), ('Couve'),
+('Polvilho doce'), ('Queijo parmesão ralado'), ('Óleo'), ('Abacate'), ('Pimenta do reino'),
+('Coentro'), ('Suco de laranja'), ('Gengibre'), ('Fubá'), ('Erva-doce'),
+('Carne Seca'), ('Mandioca'), ('Requeijão cremoso'), ('Salsinha'), ('Cebolinha'),
+('Batata palha'), ('Alho'), ('Farinha de rosca'), ('Queijo prato'), ('Feijão preto'),
+('Lombo de porco'), ('Costelinha de porco'), ('Louro'), ('Farinha de mandioca'), ('Couve-Manteiga'),
+('Peito de frango desfiado'), ('Milho verde'), ('Creme de leite'), ('Azeitona'),
+('Catupiry'), ('Massa de pastel'), ('Linguiça toscana'), ('Polenta instantânea'),
+('Trigo para quibe'), ('Pepino'), ('Pimentão'), ('Goiabada'), ('Queijo Minas Frescal'),
+('Maracujá'), ('Ovo (gema)'), ('Ovo (clara)'), ('Amido de milho'),
+('Ameixa seca em calda'), ('Abóbora'), ('Cravo-da-índia'), ('Canela em pó'),
+('Cominho'), ('Açafrão'), ('Colorau'), ('Noz-moscada'), ('Canela em pau'), 
+('Manjericão'), ('Alecrim'), ('Tomilho'), ('Salsa'), ('Páprica doce'), 
+('Páprica picante'), ('Mostarda em grão'), ('Curry'), ('Sal grosso'), 
+('Chimichurri'), ('Ervas finas'), ('Vinagre de maçã'), ('Vinagre de álcool'),
+('Molho shoyu'), ('Molho inglês'), ('Molho de pimenta'), ('Ketchup'), ('Mostarda amarela'),
+('Abobrinha'), ('Berinjela'), ('Chuchu'), ('Pimentão verde'), ('Pimentão vermelho'),
+('Pimentão amarelo'), ('Beterraba'), ('Rúcula'), ('Espinafre'), ('Brócolis'),
+('Couve-flor'), ('Repolho'), ('Repolho roxo'), ('Acelga'), ('Agrião'),
+('Mandioquinha'), ('Batata doce'), ('Inhame'), ('Quiabo'), ('Vagem'), 
+('Ervilha fresca'), ('Palmito'), ('Rabanete'), ('Nabo'), ('Abóbora Cabotiá'),
+('Abacaxi'), ('Manga'), ('Morango'), ('Uva'), ('Maçã'), ('Pera'), 
+('Laranja'), ('Goiaba'), ('Mamão'), ('Melancia'), ('Melão'), ('Kiwi'), 
+('Pêssego'), ('Ameixa'), ('Cereja'), ('Amora'), ('Framboesa'), ('Mirtilo'), 
+('Figo'), ('Caju'), ('Coco fresco'), ('Limão Taiti'),
+('Costela bovina'), ('Picanha'), ('Alcatra'), ('Maminha'), ('Fraldinha'), 
+('Acém'), ('Cupim'), ('Pernil'), ('Bacon'), ('Linguiça calabresa'), ('Salsicha'), 
+('Sobrecoxa de frango'), ('Coxinha da asa'), ('Coração de frango'), 
+('Camarão'), ('Tilápia'), ('Bacalhau'), ('Sardinha'), ('Ovo de codorna'),
+('Queijo provolone'), ('Queijo gorgonzola'), ('Queijo coalho'), ('Ricota'), 
+('Cream cheese'), ('Iogurte grego'), ('Manteiga sem sal'), ('Nata'), 
+('Leite integral'), ('Leite desnatado'), ('Leite em pó'),
+('Feijão carioca'), ('Feijão fradinho'), ('Feijão branco'), ('Lentilha'), 
+('Grão-de-bico'), ('Arroz integral'), ('Arroz arbóreo'), 
+('Polvilho azedo'), ('Chia'), ('Linhaça'), ('Gergelim'), ('Quinoa'),
+('Azeite de dendê'), ('Óleo de soja'), ('Óleo de milho'), ('Óleo de girassol'),
+('Açúcar mascavo'), ('Açúcar de confeiteiro'), ('Açúcar cristal'), ('Melado de cana'),
+('Doce de leite'), ('Creme de leite fresco'), ('Chantilly'), 
+('Chocolate meio amargo'), ('Chocolate ao leite'), ('Chocolate branco'), 
+('Cacau em pó'), ('Gelatina incolor'), ('Gelatina de morango'), ('Essência de baunilha');
+
+
+-- -----------------------------------------------------
+-- ADICIONAR NOVO TIPO DE RECEITA (se ainda não existir)
+-- -----------------------------------------------------
+INSERT IGNORE INTO `tipo_receita` (`id`, `descricao`) VALUES (5, 'Sobremesa');
+
+-- =====================================================
+-- 1. RECEITAS DE CAFÉ DA MANHÃ
+-- =====================================================
+
+INSERT INTO `receita` (`usuario_id`, `id_tipo_receita`, `titulo`, `descricao`, `tempo_preparo`) VALUES (1, 1, 'Ovos Mexidos Cremosos', '1. Bata os ovos com um garfo e adicione o leite e o sal.\n2. Derreta a manteiga em uma frigideira em fogo baixo.\n3. Despeje os ovos e mexa lentamente.\n4. Cozinhe até atingir a consistência desejada.', '10 minutos');
+SET @last_recipe_id = LAST_INSERT_ID();
+INSERT INTO `receita_ingrediente` (`id_receita`, `id_ingrediente`, `quantidade`) VALUES
+(@last_recipe_id, (SELECT id FROM ingrediente WHERE nome = 'Ovo'), '3'),
+(@last_recipe_id, (SELECT id FROM ingrediente WHERE nome = 'Leite'), '2 colheres de sopa'),
+(@last_recipe_id, (SELECT id FROM ingrediente WHERE nome = 'Manteiga'), '1 colher de chá'),
+(@last_recipe_id, (SELECT id FROM ingrediente WHERE nome = 'Sal'), 'A gosto');
+
+INSERT INTO `receita` (`usuario_id`, `id_tipo_receita`, `titulo`, `descricao`, `tempo_preparo`) VALUES (1, 1, 'Panquecas Americanas', '1. Misture os ingredientes secos.\n2. Em outra tigela, misture o ovo, leite e manteiga derretida.\n3. Junte as duas misturas sem mexer demais.\n4. Asse em frigideira quente.', '20 minutos');
+SET @last_recipe_id = LAST_INSERT_ID();
+INSERT INTO `receita_ingrediente` (`id_receita`, `id_ingrediente`, `quantidade`) VALUES
+(@last_recipe_id, (SELECT id FROM ingrediente WHERE nome = 'Farinha de Trigo'), '1 xícara'),
+(@last_recipe_id, (SELECT id FROM ingrediente WHERE nome = 'Açúcar'), '2 colheres de sopa'),
+(@last_recipe_id, (SELECT id FROM ingrediente WHERE nome = 'Fermento em pó'), '2 colheres de chá'),
+(@last_recipe_id, (SELECT id FROM ingrediente WHERE nome = 'Ovo'), '1'),
+(@last_recipe_id, (SELECT id FROM ingrediente WHERE nome = 'Leite'), '1 xícara'),
+(@last_recipe_id, (SELECT id FROM ingrediente WHERE nome = 'Manteiga'), '2 colheres de sopa');
+
+INSERT INTO `receita` (`usuario_id`, `id_tipo_receita`, `titulo`, `descricao`, `tempo_preparo`) VALUES (1, 1, 'Vitamina de Banana com Aveia', '1. Coloque todos os ingredientes no liquidificador.\n2. Bata até a mistura ficar homogênea e cremosa.\n3. Sirva imediatamente.', '5 minutos');
+SET @last_recipe_id = LAST_INSERT_ID();
+INSERT INTO `receita_ingrediente` (`id_receita`, `id_ingrediente`, `quantidade`) VALUES
+(@last_recipe_id, (SELECT id FROM ingrediente WHERE nome = 'Banana'), '2'),
+(@last_recipe_id, (SELECT id FROM ingrediente WHERE nome = 'Leite'), '200 ml'),
+(@last_recipe_id, (SELECT id FROM ingrediente WHERE nome = 'Aveia em flocos'), '2 colheres de sopa'),
+(@last_recipe_id, (SELECT id FROM ingrediente WHERE nome = 'Mel'), '1 colher de sopa');
+
+INSERT INTO `receita` (`usuario_id`, `id_tipo_receita`, `titulo`, `descricao`, `tempo_preparo`) VALUES (1, 1, 'Pão na Chapa com Queijo', '1. Passe manteiga nos dois lados de cada fatia de pão.\n2. Coloque uma fatia na frigideira quente, adicione o queijo e cubra com a outra fatia.\n3. Doure dos dois lados.', '10 minutos');
+SET @last_recipe_id = LAST_INSERT_ID();
+INSERT INTO `receita_ingrediente` (`id_receita`, `id_ingrediente`, `quantidade`) VALUES
+(@last_recipe_id, (SELECT id FROM ingrediente WHERE nome = 'Pão de forma'), '2 fatias'),
+(@last_recipe_id, (SELECT id FROM ingrediente WHERE nome = 'Queijo mussarela'), '2 fatias'),
+(@last_recipe_id, (SELECT id FROM ingrediente WHERE nome = 'Manteiga'), '1 colher de sopa');
+
+INSERT INTO `receita` (`usuario_id`, `id_tipo_receita`, `titulo`, `descricao`, `tempo_preparo`) VALUES (1, 1, 'Iogurte com Frutas e Granola', '1. Em uma tigela, coloque o iogurte natural.\n2. Pique as frutas vermelhas e adicione por cima.\n3. Finalize com a granola.', '5 minutos');
+SET @last_recipe_id = LAST_INSERT_ID();
+INSERT INTO `receita_ingrediente` (`id_receita`, `id_ingrediente`, `quantidade`) VALUES
+(@last_recipe_id, (SELECT id FROM ingrediente WHERE nome = 'Iogurte natural'), '1 pote'),
+(@last_recipe_id, (SELECT id FROM ingrediente WHERE nome = 'Frutas vermelhas'), '1/2 xícara'),
+(@last_recipe_id, (SELECT id FROM ingrediente WHERE nome = 'Granola'), '3 colheres de sopa');
+
+-- =====================================================
+-- 2. RECEITAS DE ALMOÇO
+-- =====================================================
+
+INSERT INTO `receita` (`usuario_id`, `id_tipo_receita`, `titulo`, `descricao`, `tempo_preparo`) VALUES (1, 2, 'Bife Acebolado', '1. Tempere os bifes com sal.\n2. Frite em óleo quente até o ponto desejado.\n3. Na mesma frigideira, frite as rodelas de cebola até dourarem.\n4. Sirva os bifes com a cebola por cima.', '25 minutos');
+SET @last_recipe_id = LAST_INSERT_ID();
+INSERT INTO `receita_ingrediente` (`id_receita`, `id_ingrediente`, `quantidade`) VALUES
+(@last_recipe_id, (SELECT id FROM ingrediente WHERE nome = 'Bife'), '2'),
+(@last_recipe_id, (SELECT id FROM ingrediente WHERE nome = 'Cebola'), '1'),
+(@last_recipe_id, (SELECT id FROM ingrediente WHERE nome = 'Sal'), 'A gosto');
+
+INSERT INTO `receita` (`usuario_id`, `id_tipo_receita`, `titulo`, `descricao`, `tempo_preparo`) VALUES (1, 2, 'Filé de Frango Grelhado', '1. Tempere os filés com sal e limão.\n2. Grelhe em uma frigideira antiaderente quente com um fio de azeite.\n3. Sirva com arroz e salada.', '20 minutos');
+SET @last_recipe_id = LAST_INSERT_ID();
+INSERT INTO `receita_ingrediente` (`id_receita`, `id_ingrediente`, `quantidade`) VALUES
+(@last_recipe_id, (SELECT id FROM ingrediente WHERE nome = 'Filé de Frango'), '2 filés'),
+(@last_recipe_id, (SELECT id FROM ingrediente WHERE nome = 'Sal'), 'A gosto'),
+(@last_recipe_id, (SELECT id FROM ingrediente WHERE nome = 'Limão'), '1/2');
+
+INSERT INTO `receita` (`usuario_id`, `id_tipo_receita`, `titulo`, `descricao`, `tempo_preparo`) VALUES (1, 2, 'Arroz e Feijão Tradicional', '1. Cozinhe o arroz como de costume.\n2. Cozinhe o feijão na pressão e depois tempere com alho e sal.\n3. Sirva junto com uma proteína de sua escolha.', '1 hora');
+SET @last_recipe_id = LAST_INSERT_ID();
+INSERT INTO `receita_ingrediente` (`id_receita`, `id_ingrediente`, `quantidade`) VALUES
+(@last_recipe_id, (SELECT id FROM ingrediente WHERE nome = 'Arroz'), '1 xícara'),
+(@last_recipe_id, (SELECT id FROM ingrediente WHERE nome = 'Feijão'), '1 xícara');
+
+INSERT INTO `receita` (`usuario_id`, `id_tipo_receita`, `titulo`, `descricao`, `tempo_preparo`) VALUES (1, 2, 'Salada Completa', '1. Lave e pique o alface e o tomate.\n2. Desfie o frango cozido.\n3. Misture tudo em uma travessa e tempere com azeite e sal.', '15 minutos');
+SET @last_recipe_id = LAST_INSERT_ID();
+INSERT INTO `receita_ingrediente` (`id_receita`, `id_ingrediente`, `quantidade`) VALUES
+(@last_recipe_id, (SELECT id FROM ingrediente WHERE nome = 'Alface'), '1 pé'),
+(@last_recipe_id, (SELECT id FROM ingrediente WHERE nome = 'Tomate'), '2'),
+(@last_recipe_id, (SELECT id FROM ingrediente WHERE nome = 'Filé de Frango'), '1 filé cozido e desfiado'),
+(@last_recipe_id, (SELECT id FROM ingrediente WHERE nome = 'Azeite de Oliva'), 'A gosto');
+
+INSERT INTO `receita` (`usuario_id`, `id_tipo_receita`, `titulo`, `descricao`, `tempo_preparo`) VALUES (1, 2, 'Salmão Assado com Batatas', '1. Tempere o salmão com sal e limão siciliano.\n2. Corte as batatas em rodelas e tempere com azeite e sal.\n3. Asse tudo em um refratário por 30 minutos a 200°C.', '40 minutos');
+SET @last_recipe_id = LAST_INSERT_ID();
+INSERT INTO `receita_ingrediente` (`id_receita`, `id_ingrediente`, `quantidade`) VALUES
+(@last_recipe_id, (SELECT id FROM ingrediente WHERE nome = 'Salmão'), '1 posta'),
+(@last_recipe_id, (SELECT id FROM ingrediente WHERE nome = 'Batata'), '2'),
+(@last_recipe_id, (SELECT id FROM ingrediente WHERE nome = 'Limão siciliano'), '1'),
+(@last_recipe_id, (SELECT id FROM ingrediente WHERE nome = 'Azeite de Oliva'), 'A gosto');
+
+-- =====================================================
+-- 3. RECEITAS DE LANCHE
+-- =====================================================
+
+INSERT INTO `receita` (`usuario_id`, `id_tipo_receita`, `titulo`, `descricao`, `tempo_preparo`) VALUES (1, 3, 'Misto Quente', '1. Monte o sanduíche com pão, presunto e queijo.\n2. Passe manteiga por fora e doure na frigideira ou sanduicheira.', '10 minutos');
+SET @last_recipe_id = LAST_INSERT_ID();
+INSERT INTO `receita_ingrediente` (`id_receita`, `id_ingrediente`, `quantidade`) VALUES
+(@last_recipe_id, (SELECT id FROM ingrediente WHERE nome = 'Pão de forma'), '2 fatias'),
+(@last_recipe_id, (SELECT id FROM ingrediente WHERE nome = 'Queijo mussarela'), '2 fatias'),
+(@last_recipe_id, (SELECT id FROM ingrediente WHERE nome = 'Presunto'), '2 fatias');
+
+INSERT INTO `receita` (`usuario_id`, `id_tipo_receita`, `titulo`, `descricao`, `tempo_preparo`) VALUES (1, 3, 'Sanduíche de Atum', '1. Misture o atum com a maionese.\n2. Adicione sal se necessário.\n3. Recheie o pão de forma e sirva.', '10 minutos');
+SET @last_recipe_id = LAST_INSERT_ID();
+INSERT INTO `receita_ingrediente` (`id_receita`, `id_ingrediente`, `quantidade`) VALUES
+(@last_recipe_id, (SELECT id FROM ingrediente WHERE nome = 'Atum enlatado'), '1 lata'),
+(@last_recipe_id, (SELECT id FROM ingrediente WHERE nome = 'Maionese'), '3 colheres de sopa'),
+(@last_recipe_id, (SELECT id FROM ingrediente WHERE nome = 'Pão de forma'), '2 fatias');
+
+INSERT INTO `receita` (`usuario_id`, `id_tipo_receita`, `titulo`, `descricao`, `tempo_preparo`) VALUES (1, 3, 'Hambúrguer Caseiro', '1. Grelhe o hambúrguer.\n2. Monte o lanche no pão com queijo, alface e tomate.', '20 minutos');
+SET @last_recipe_id = LAST_INSERT_ID();
+INSERT INTO `receita_ingrediente` (`id_receita`, `id_ingrediente`, `quantidade`) VALUES
+(@last_recipe_id, (SELECT id FROM ingrediente WHERE nome = 'Pão de hambúrguer'), '1'),
+(@last_recipe_id, (SELECT id FROM ingrediente WHERE nome = 'Hambúrguer de carne'), '1'),
+(@last_recipe_id, (SELECT id FROM ingrediente WHERE nome = 'Queijo mussarela'), '1 fatia'),
+(@last_recipe_id, (SELECT id FROM ingrediente WHERE nome = 'Alface'), '1 folha'),
+(@last_recipe_id, (SELECT id FROM ingrediente WHERE nome = 'Tomate'), '1 rodela');
+
+INSERT INTO `receita` (`usuario_id`, `id_tipo_receita`, `titulo`, `descricao`, `tempo_preparo`) VALUES (1, 3, 'Beirute Simples', '1. Abra o pão sírio.\n2. Recheie com peito de peru, queijo e tomate.\n3. Leve à sanduicheira para aquecer.', '15 minutos');
+SET @last_recipe_id = LAST_INSERT_ID();
+INSERT INTO `receita_ingrediente` (`id_receita`, `id_ingrediente`, `quantidade`) VALUES
+(@last_recipe_id, (SELECT id FROM ingrediente WHERE nome = 'Pão sírio'), '1'),
+(@last_recipe_id, (SELECT id FROM ingrediente WHERE nome = 'Peito de peru'), '3 fatias'),
+(@last_recipe_id, (SELECT id FROM ingrediente WHERE nome = 'Queijo mussarela'), '2 fatias');
+
+INSERT INTO `receita` (`usuario_id`, `id_tipo_receita`, `titulo`, `descricao`, `tempo_preparo`) VALUES (1, 3, 'Wrap de Frango', '1. Grelhe e desfie o frango.\n2. Misture com iogurte e hortelã.\n3. Recheie o pão sírio e enrole.', '20 minutos');
+SET @last_recipe_id = LAST_INSERT_ID();
+INSERT INTO `receita_ingrediente` (`id_receita`, `id_ingrediente`, `quantidade`) VALUES
+(@last_recipe_id, (SELECT id FROM ingrediente WHERE nome = 'Pão sírio'), '1'),
+(@last_recipe_id, (SELECT id FROM ingrediente WHERE nome = 'Filé de Frango'), '1 filé pequeno'),
+(@last_recipe_id, (SELECT id FROM ingrediente WHERE nome = 'Iogurte natural'), '2 colheres de sopa'),
+(@last_recipe_id, (SELECT id FROM ingrediente WHERE nome = 'Hortelã'), 'Folhas');
+
+-- =====================================================
+-- 4. RECEITAS DE JANTA
+-- =====================================================
+
+INSERT INTO `receita` (`usuario_id`, `id_tipo_receita`, `titulo`, `descricao`, `tempo_preparo`) VALUES (1, 4, 'Macarronada à Bolonhesa', '1. Cozinhe o macarrão.\n2. Refogue a carne moída com cebola e adicione o molho de tomate.\n3. Sirva o macarrão com o molho.', '40 minutos');
+SET @last_recipe_id = LAST_INSERT_ID();
+INSERT INTO `receita_ingrediente` (`id_receita`, `id_ingrediente`, `quantidade`) VALUES
+(@last_recipe_id, (SELECT id FROM ingrediente WHERE nome = 'Macarrão espaguete'), '200g'),
+(@last_recipe_id, (SELECT id FROM ingrediente WHERE nome = 'Carne moída'), '250g'),
+(@last_recipe_id, (SELECT id FROM ingrediente WHERE nome = 'Molho de tomate'), '1 xícara');
+
+INSERT INTO `receita` (`usuario_id`, `id_tipo_receita`, `titulo`, `descricao`, `tempo_preparo`) VALUES (1, 4, 'Lasanha à Bolonhesa', '1. Prepare o molho à bolonhesa e um molho branco.\n2. Monte a lasanha intercalando molhos, massa e queijo.\n3. Finalize com queijo parmesão e asse por 30 minutos.', '1 hora e 20 minutos');
+SET @last_recipe_id = LAST_INSERT_ID();
+INSERT INTO `receita_ingrediente` (`id_receita`, `id_ingrediente`, `quantidade`) VALUES
+(@last_recipe_id, (SELECT id FROM ingrediente WHERE nome = 'Lasanha (massa)'), '200g'),
+(@last_recipe_id, (SELECT id FROM ingrediente WHERE nome = 'Carne moída'), '400g'),
+(@last_recipe_id, (SELECT id FROM ingrediente WHERE nome = 'Queijo mussarela'), '300g'),
+(@last_recipe_id, (SELECT id FROM ingrediente WHERE nome = 'Queijo parmesão'), '50g'),
+(@last_recipe_id, (SELECT id FROM ingrediente WHERE nome = 'Molho de tomate'), '1 lata');
+
+INSERT INTO `receita` (`usuario_id`, `id_tipo_receita`, `titulo`, `descricao`, `tempo_preparo`) VALUES (1, 4, 'Pizza de Calabresa', '1. Abra a massa de pizza.\n2. Espalhe o molho de tomate, cubra com queijo e distribua as rodelas de calabresa.\n3. Salpique orégano e asse em forno alto.', '30 minutos');
+SET @last_recipe_id = LAST_INSERT_ID();
+INSERT INTO `receita_ingrediente` (`id_receita`, `id_ingrediente`, `quantidade`) VALUES
+(@last_recipe_id, (SELECT id FROM ingrediente WHERE nome = 'Massa de pizza'), '1 disco'),
+(@last_recipe_id, (SELECT id FROM ingrediente WHERE nome = 'Queijo mussarela'), '200g'),
+(@last_recipe_id, (SELECT id FROM ingrediente WHERE nome = 'Calabresa'), '100g'),
+(@last_recipe_id, (SELECT id FROM ingrediente WHERE nome = 'Molho de tomate'), '1/2 xícara'),
+(@last_recipe_id, (SELECT id FROM ingrediente WHERE nome = 'Orégano'), 'A gosto');
+
+INSERT INTO `receita` (`usuario_id`, `id_tipo_receita`, `titulo`, `descricao`, `tempo_preparo`) VALUES (1, 4, 'Caldo Verde', '1. Cozinhe as batatas e bata no liquidificador com a água do cozimento.\n2. Refogue a calabresa e junte ao caldo.\n3. Adicione a couve fatiada e cozinhe por mais 5 minutos.', '50 minutos');
+SET @last_recipe_id = LAST_INSERT_ID();
+INSERT INTO `receita_ingrediente` (`id_receita`, `id_ingrediente`, `quantidade`) VALUES
+(@last_recipe_id, (SELECT id FROM ingrediente WHERE nome = 'Batata'), '4'),
+(@last_recipe_id, (SELECT id FROM ingrediente WHERE nome = 'Calabresa'), '1 gomo'),
+(@last_recipe_id, (SELECT id FROM ingrediente WHERE nome = 'Couve'), '1 maço'),
+(@last_recipe_id, (SELECT id FROM ingrediente WHERE nome = 'Cebola'), '1/2');
+
+INSERT INTO `receita` (`usuario_id`, `id_tipo_receita`, `titulo`, `descricao`, `tempo_preparo`) VALUES (1, 4, 'Risoto de Frango', '1. Refogue o frango desfiado com cebola.\n2. Adicione o arroz arbóreo e refogue mais um pouco.\n3. Vá adicionando caldo de legumes aos poucos, mexendo sempre, até o arroz ficar cozido.', '45 minutos');
+SET @last_recipe_id = LAST_INSERT_ID();
+INSERT INTO `receita_ingrediente` (`id_receita`, `id_ingrediente`, `quantidade`) VALUES
+(@last_recipe_id, (SELECT id FROM ingrediente WHERE nome = 'Arroz'), '1 xícara (arbóreo)'),
+(@last_recipe_id, (SELECT id FROM ingrediente WHERE nome = 'Filé de Frango'), '1 peito desfiado'),
+(@last_recipe_id, (SELECT id FROM ingrediente WHERE nome = 'Cebola'), '1/2');
+
+-- =====================================================
+-- 5. RECEITAS DE SOBREMESA
+-- =====================================================
+
+INSERT INTO `receita` (`usuario_id`, `id_tipo_receita`, `titulo`, `descricao`, `tempo_preparo`) VALUES (1, 5, 'Brigadeiro de Panela', '1. Em uma panela, misture o leite condensado, o chocolate em pó e a manteiga.\n2. Cozinhe em fogo baixo, mexendo sempre, até desgrudar do fundo da panela.', '15 minutos');
+SET @last_recipe_id = LAST_INSERT_ID();
+INSERT INTO `receita_ingrediente` (`id_receita`, `id_ingrediente`, `quantidade`) VALUES
+(@last_recipe_id, (SELECT id FROM ingrediente WHERE nome = 'Leite condensado'), '1 lata'),
+(@last_recipe_id, (SELECT id FROM ingrediente WHERE nome = 'Chocolate em pó'), '3 colheres de sopa'),
+(@last_recipe_id, (SELECT id FROM ingrediente WHERE nome = 'Manteiga'), '1 colher de sopa');
+
+INSERT INTO `receita` (`usuario_id`, `id_tipo_receita`, `titulo`, `descricao`, `tempo_preparo`) VALUES (1, 5, 'Mousse de Limão Rápido', '1. Bata o leite condensado e o creme de leite no liquidificador.\n2. Adicione o suco de limão aos poucos, batendo sempre, até firmar.\n3. Leve para gelar.', '10 minutos + geladeira');
+SET @last_recipe_id = LAST_INSERT_ID();
+INSERT INTO `receita_ingrediente` (`id_receita`, `id_ingrediente`, `quantidade`) VALUES
+(@last_recipe_id, (SELECT id FROM ingrediente WHERE nome = 'Leite condensado'), '1 lata'),
+(@last_recipe_id, (SELECT id FROM ingrediente WHERE nome = 'Creme de leite'), '1 caixinha'),
+(@last_recipe_id, (SELECT id FROM ingrediente WHERE nome = 'Limão'), '1/2 xícara de suco');
+
+INSERT INTO `receita` (`usuario_id`, `id_tipo_receita`, `titulo`, `descricao`, `tempo_preparo`) VALUES (1, 5, 'Pavê de Biscoito', '1. Prepare um creme com leite condensado e gemas.\n2. Monte em um refratário camadas de creme, biscoito umedecido no leite e finalize com creme.\n3. Leve para gelar.', '30 minutos + geladeira');
+SET @last_recipe_id = LAST_INSERT_ID();
+INSERT INTO `receita_ingrediente` (`id_receita`, `id_ingrediente`, `quantidade`) VALUES
+(@last_recipe_id, (SELECT id FROM ingrediente WHERE nome = 'Leite condensado'), '1 lata'),
+(@last_recipe_id, (SELECT id FROM ingrediente WHERE nome = 'Biscoito maisena'), '1 pacote'),
+(@last_recipe_id, (SELECT id FROM ingrediente WHERE nome = 'Leite'), '1 xícara');
+
+INSERT INTO `receita` (`usuario_id`, `id_tipo_receita`, `titulo`, `descricao`, `tempo_preparo`) VALUES (1, 5, 'Bolo de Cenoura com Chocolate', '1. Bata no liquidificador a cenoura, ovos e óleo.\n2. Misture com os ingredientes secos.\n3. Asse em forno médio.\n4. Faça uma calda com chocolate em pó e açúcar para cobrir.', '50 minutos');
+SET @last_recipe_id = LAST_INSERT_ID();
+INSERT INTO `receita_ingrediente` (`id_receita`, `id_ingrediente`, `quantidade`) VALUES
+(@last_recipe_id, (SELECT id FROM ingrediente WHERE nome = 'Cenoura'), '3'),
+(@last_recipe_id, (SELECT id FROM ingrediente WHERE nome = 'Ovo'), '3'),
+(@last_recipe_id, (SELECT id FROM ingrediente WHERE nome = 'Farinha de Trigo'), '2 xícaras'),
+(@last_recipe_id, (SELECT id FROM ingrediente WHERE nome = 'Açúcar'), '1 xícara'),
+(@last_recipe_id, (SELECT id FROM ingrediente WHERE nome = 'Chocolate em pó'), '4 colheres de sopa');
+
+INSERT INTO `receita` (`usuario_id`, `id_tipo_receita`, `titulo`, `descricao`, `tempo_preparo`) VALUES (1, 5, 'Cocada Cremosa', '1. Misture todos os ingredientes em uma panela.\n2. Cozinhe em fogo baixo, mexendo sempre, até começar a desgrudar do fundo.\n3. Despeje em um refratário untado e espere esfriar.', '25 minutos');
+SET @last_recipe_id = LAST_INSERT_ID();
+INSERT INTO `receita_ingrediente` (`id_receita`, `id_ingrediente`, `quantidade`) VALUES
+(@last_recipe_id, (SELECT id FROM ingrediente WHERE nome = 'Leite condensado'), '1 lata'),
+(@last_recipe_id, (SELECT id FROM ingrediente WHERE nome = 'Coco ralado'), '100g'),
+(@last_recipe_id, (SELECT id FROM ingrediente WHERE nome = 'Açúcar'), '1/2 xícara');
+
+
+INSERT INTO `swipesdereceitas`.`swipe` (`id_usuario`, `id_receita`, `status`) VALUES ('1', '1', 'dislike');
+INSERT INTO `swipesdereceitas`.`swipe` (`id_usuario`, `id_receita`, `status`) VALUES ('1', '2', 'dislike');
+INSERT INTO `swipesdereceitas`.`swipe` (`id_usuario`, `id_receita`, `status`) VALUES ('1', '3', 'like');
+INSERT INTO `swipesdereceitas`.`swipe` (`id_usuario`, `id_receita`, `status`) VALUES ('1', '4', 'like');
+INSERT INTO `swipesdereceitas`.`swipe` (`id_usuario`, `id_receita`, `status`) VALUES ('1', '5', 'like');
+
+INSERT INTO `swipesdereceitas`.`swipe` (`id_usuario`, `id_receita`, `status`) VALUES ('1', '6', 'dislike');
+INSERT INTO `swipesdereceitas`.`swipe` (`id_usuario`, `id_receita`, `status`) VALUES ('1', '7', 'dislike');
+INSERT INTO `swipesdereceitas`.`swipe` (`id_usuario`, `id_receita`, `status`) VALUES ('1', '8', 'like');
+INSERT INTO `swipesdereceitas`.`swipe` (`id_usuario`, `id_receita`, `status`) VALUES ('1', '9', 'like');
+INSERT INTO `swipesdereceitas`.`swipe` (`id_usuario`, `id_receita`, `status`) VALUES ('1', '10', 'like');
+
+INSERT INTO `swipesdereceitas`.`swipe` (`id_usuario`, `id_receita`, `status`) VALUES ('1', '11', 'dislike');
+INSERT INTO `swipesdereceitas`.`swipe` (`id_usuario`, `id_receita`, `status`) VALUES ('1', '12', 'dislike');
+INSERT INTO `swipesdereceitas`.`swipe` (`id_usuario`, `id_receita`, `status`) VALUES ('1', '13', 'like');
+INSERT INTO `swipesdereceitas`.`swipe` (`id_usuario`, `id_receita`, `status`) VALUES ('1', '14', 'like');
+INSERT INTO `swipesdereceitas`.`swipe` (`id_usuario`, `id_receita`, `status`) VALUES ('1', '15', 'like');
+
+INSERT INTO `swipesdereceitas`.`swipe` (`id_usuario`, `id_receita`, `status`) VALUES ('1', '16', 'dislike');
+INSERT INTO `swipesdereceitas`.`swipe` (`id_usuario`, `id_receita`, `status`) VALUES ('1', '17', 'dislike');
+INSERT INTO `swipesdereceitas`.`swipe` (`id_usuario`, `id_receita`, `status`) VALUES ('1', '18', 'like');
+INSERT INTO `swipesdereceitas`.`swipe` (`id_usuario`, `id_receita`, `status`) VALUES ('1', '19', 'like');
+INSERT INTO `swipesdereceitas`.`swipe` (`id_usuario`, `id_receita`, `status`) VALUES ('1', '20', 'like');
+
+INSERT INTO `swipesdereceitas`.`swipe` (`id_usuario`, `id_receita`, `status`) VALUES ('1', '21', 'dislike');
+INSERT INTO `swipesdereceitas`.`swipe` (`id_usuario`, `id_receita`, `status`) VALUES ('1', '22', 'dislike');
+INSERT INTO `swipesdereceitas`.`swipe` (`id_usuario`, `id_receita`, `status`) VALUES ('1', '23', 'like');
+INSERT INTO `swipesdereceitas`.`swipe` (`id_usuario`, `id_receita`, `status`) VALUES ('1', '24', 'like');
+INSERT INTO `swipesdereceitas`.`swipe` (`id_usuario`, `id_receita`, `status`) VALUES ('1', '25', 'like');

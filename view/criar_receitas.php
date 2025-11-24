@@ -118,6 +118,9 @@
             <button type="submit" class="btn submit-btn">Salvar Receita Completa</button>
         </form>
     </div>
+    <?php
+        include "view/footer.php";
+    ?>
 </body>
 </html>
 
