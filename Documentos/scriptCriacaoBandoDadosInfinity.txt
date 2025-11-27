@@ -161,13 +161,7 @@ INSERT IGNORE INTO `ingrediente` (`nome`) VALUES
 ('Molho branco'), ('Salmão'), ('Batata'), ('Limão siciliano'), ('Azeite de Oliva'),
 ('Massa de pizza'), ('Orégano'), ('Leite condensado'), ('Chocolate em pó'),
 ('Chocolate granulado'), ('Biscoito maisena'), ('Limão'), ('Leite de coco'), 
-('Coco ralado'), ('Cenoura'), ('Couve');
-
--- =====================================================
--- ADIÇÃO DE NOVOS INGREDIENTES
--- (Ignora a inserção se o ingrediente já existir)
--- =====================================================
-INSERT IGNORE INTO `ingrediente` (`nome`) VALUES
+('Coco ralado'), ('Cenoura'), ('Couve'),
 ('Polvilho doce'), ('Queijo parmesão ralado'), ('Óleo'), ('Abacate'), ('Pimenta do reino'),
 ('Coentro'), ('Suco de laranja'), ('Gengibre'), ('Fubá'), ('Erva-doce'),
 ('Carne Seca'), ('Mandioca'), ('Requeijão cremoso'), ('Salsinha'), ('Cebolinha'),
@@ -177,7 +171,37 @@ INSERT IGNORE INTO `ingrediente` (`nome`) VALUES
 ('Catupiry'), ('Massa de pastel'), ('Linguiça toscana'), ('Polenta instantânea'),
 ('Trigo para quibe'), ('Pepino'), ('Pimentão'), ('Goiabada'), ('Queijo Minas Frescal'),
 ('Maracujá'), ('Ovo (gema)'), ('Ovo (clara)'), ('Amido de milho'),
-('Ameixa seca em calda'), ('Abóbora'), ('Cravo-da-índia'), ('Canela em pó');
+('Ameixa seca em calda'), ('Abóbora'), ('Cravo-da-índia'), ('Canela em pó'),
+('Cominho'), ('Açafrão'), ('Colorau'), ('Noz-moscada'), ('Canela em pau'), 
+('Manjericão'), ('Alecrim'), ('Tomilho'), ('Salsa'), ('Páprica doce'), 
+('Páprica picante'), ('Mostarda em grão'), ('Curry'), ('Sal grosso'), 
+('Chimichurri'), ('Ervas finas'), ('Vinagre de maçã'), ('Vinagre de álcool'),
+('Molho shoyu'), ('Molho inglês'), ('Molho de pimenta'), ('Ketchup'), ('Mostarda amarela'),
+('Abobrinha'), ('Berinjela'), ('Chuchu'), ('Pimentão verde'), ('Pimentão vermelho'),
+('Pimentão amarelo'), ('Beterraba'), ('Rúcula'), ('Espinafre'), ('Brócolis'),
+('Couve-flor'), ('Repolho'), ('Repolho roxo'), ('Acelga'), ('Agrião'),
+('Mandioquinha'), ('Batata doce'), ('Inhame'), ('Quiabo'), ('Vagem'), 
+('Ervilha fresca'), ('Palmito'), ('Rabanete'), ('Nabo'), ('Abóbora Cabotiá'),
+('Abacaxi'), ('Manga'), ('Morango'), ('Uva'), ('Maçã'), ('Pera'), 
+('Laranja'), ('Goiaba'), ('Mamão'), ('Melancia'), ('Melão'), ('Kiwi'), 
+('Pêssego'), ('Ameixa'), ('Cereja'), ('Amora'), ('Framboesa'), ('Mirtilo'), 
+('Figo'), ('Caju'), ('Coco fresco'), ('Limão Taiti'),
+('Costela bovina'), ('Picanha'), ('Alcatra'), ('Maminha'), ('Fraldinha'), 
+('Acém'), ('Cupim'), ('Pernil'), ('Bacon'), ('Linguiça calabresa'), ('Salsicha'), 
+('Sobrecoxa de frango'), ('Coxinha da asa'), ('Coração de frango'), 
+('Camarão'), ('Tilápia'), ('Bacalhau'), ('Sardinha'), ('Ovo de codorna'),
+('Queijo provolone'), ('Queijo gorgonzola'), ('Queijo coalho'), ('Ricota'), 
+('Cream cheese'), ('Iogurte grego'), ('Manteiga sem sal'), ('Nata'), 
+('Leite integral'), ('Leite desnatado'), ('Leite em pó'),
+('Feijão carioca'), ('Feijão fradinho'), ('Feijão branco'), ('Lentilha'), 
+('Grão-de-bico'), ('Arroz integral'), ('Arroz arbóreo'), 
+('Polvilho azedo'), ('Chia'), ('Linhaça'), ('Gergelim'), ('Quinoa'),
+('Azeite de dendê'), ('Óleo de soja'), ('Óleo de milho'), ('Óleo de girassol'),
+('Açúcar mascavo'), ('Açúcar de confeiteiro'), ('Açúcar cristal'), ('Melado de cana'),
+('Doce de leite'), ('Creme de leite fresco'), ('Chantilly'), 
+('Chocolate meio amargo'), ('Chocolate ao leite'), ('Chocolate branco'), 
+('Cacau em pó'), ('Gelatina incolor'), ('Gelatina de morango'), ('Essência de baunilha');
+
 
 -- =====================================================
 -- INSERÇÃO DAS RECEITAS (SEU SCRIPT ORIGINAL)
