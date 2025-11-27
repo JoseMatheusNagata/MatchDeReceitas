@@ -62,9 +62,9 @@
         </div>
     <?php endif; ?>
     </div>
-     <?php
-        include "view/footer.php";
-    ?>
   </body>
  </main>
+<?php
+    include "view/footer.php";
+?>
 </html>
