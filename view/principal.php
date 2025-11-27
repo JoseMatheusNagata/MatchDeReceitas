@@ -79,9 +79,7 @@ require_once __DIR__ . '/../controller/AuthCheckController.php';
         </div>
     </div>
 
-    <footer class="site-footer-home">
-        <?php
-            include "view/footer.php";
-        ?>
-    </footer>
+    <?php
+        include "view/footer.php";
+    ?>
 </body>    
