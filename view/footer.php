@@ -110,14 +110,5 @@
             </a>
         </div>
     </div>
-     <div class="developer-info">
-        <p>Desenvolvido por <strong>Bruna Isabelle</strong></p>
-        
-        <div class="social-links">
-            <a href="https://github.com/Brunhr" target="_blank" class="social-btn">
-                <img src="https://cdn-icons-png.flaticon.com/512/25/25231.png" alt="GitHub">
-                GitHub
-            </a>
-        </div>
-    </div>
+
 </footer>
