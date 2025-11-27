@@ -1,5 +1,61 @@
-body { 
-    font-family: Arial, sans-serif; 
-    background-color: #f4f4f4; 
-    margin: 0; padding: 20px; 
+body {
+     padding-top: 100px; 
+}
+.container {
+    margin: 0 auto 30px auto; 
+    width: 90%;
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    flex:1;
+}
+
+.receitas-table {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 30px;
+        justify-content: space-around;
+        margin-top: 20px;
+}
+.receitas-table-h2 {
+    text-align: center;
+        color: #333;
+        border-bottom: 2px solid #eee;
+        padding-bottom: 10px;
+}
+.table-container {
+        max-width: 120px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 30px;
+        justify-content: space-around;
+        margin-top: 20px;
+}
+.table-stats {
+        flex: 1 1 100%; 
+        min-width: unset;
+}
+.table-stats table {
+         width: 100%;
+        border-collapse: collapse;
+        margin-top: 15px;
+        display: block; 
+        overflow-x: auto;
+}
+.table-stats table table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 15px;
+        display: block; 
+        overflow-x: auto;
+}
+.table-stats th, .table-stats td {
+        border: 1px solid #ddd;
+        padding: 10px;
+        text-align: left;
+}
+.table-stats th {
+        background-color: #d4d4d4;
+        font-weight: bold;
 }

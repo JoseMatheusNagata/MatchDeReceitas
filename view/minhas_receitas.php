@@ -1,7 +1,17 @@
-
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minhas Receitas</title>
+    <link rel="stylesheet" href="./css/minha_lista.css">
+</head>
+<body>
 <main>
-    <h2>Minhas Receitas</h2>
-
+    <div class="container">
+    
+    <div class="receitas-table">
+        <h2>Minhas Receitas</h2>
     <?php
     // Helpers para compatibilidade array/objeto e saída segura
     function get_field($item, $key, $default = null) {
@@ -24,15 +34,18 @@
     <?php if (empty($receitas)): ?>
         <p>Nenhuma receita encontrada.</p>
     <?php else: ?>
+    <div class="table-container">
+
+        <div class="table-stats">
         <table border="1" cellpadding="6" cellspacing="0">
-            <tr><th>Id</th><th>Receita</th><th>Ações</th></tr>
+            <tr><th style="width: 10%;">Posição</th><th>Receita</th><th style="width: 20%;">Ações</th></tr>
             <?php foreach ($receitas as $r): ?>
                 <?php
                     $id = pick_field($r, ['id','Id','id_receita'], '');
                     $titulo = pick_field($r, ['titulo','titulo_receita','Titulo'], 'Sem título');
                 ?>
                 <tr>
-                    <td><?= safe_str($id) ?></td>
+                    <td style="text-align: center;"><?= safe_str($id) ?></td>
                     <td><?= safe_str($titulo) ?></td>
                     <td>
                         <!-- Atualize as actions abaixo para os nomes reais de sua rota se necessário -->
@@ -41,12 +54,20 @@
                         <form method="post" action="index.php?action=removerReceita" style="display:inline;">
                             <input type="hidden" name="id" value="<?= safe_str($id) ?>">
                             <input type="hidden" name="csrf_token" value="<?= safe_str($_SESSION['csrf_token'] ?? '') ?>">
-                            <button type="submit" onclick="return confirm('Excluir?')">Excluir</button>
+                        
                         </form>
                     </td>
                 </tr>
             <?php endforeach; ?>
-        </table>
+          </table>
+         </div>
+         </div>
+        </div>
     <?php endif; ?>
-</main>
-
+    </div>
+     <?php
+        include "view/footer.php";
+    ?>
+  </body>
+ </main>
+</html>
