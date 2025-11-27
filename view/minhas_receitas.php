@@ -9,9 +9,11 @@
 <body>
 <main>
     <div class="container">
+        <h1 class="receitas-table-h1">Minhas Receitas</h1>
+        <p class="receitas-table-p">Aqui estão todas as receitas que você criou!</p>
+        <p class="receitas-table-p">Para editar uma receita, clique no botão <span style="color: blue;">Editar</span>.</p>
     
     <div class="receitas-table">
-        <h2>Minhas Receitas</h2>
     <?php
     // Helpers para compatibilidade array/objeto e saída segura
     function get_field($item, $key, $default = null) {
@@ -38,7 +40,7 @@
 
         <div class="table-stats">
         <table border="1" cellpadding="6" cellspacing="0">
-            <tr><th style="width: 10%;">Posição</th><th>Receita</th><th style="width: 20%;">Ações</th></tr>
+            <tr><th>Posição</th><th>Receita</th><th style="width: 20%;">Ações</th></tr>
             <?php foreach ($receitas as $r): ?>
                 <?php
                     $id = pick_field($r, ['id','Id','id_receita'], '');
@@ -48,14 +50,9 @@
                     <td style="text-align: center;"><?= safe_str($id) ?></td>
                     <td><?= safe_str($titulo) ?></td>
                     <td>
-                        <!-- Atualize as actions abaixo para os nomes reais de sua rota se necessário -->
-                        <a href="index.php?action=criarReceitas&id=<?= safe_str($id) ?>">Editar</a>
-                        |
-                        <form method="post" action="index.php?action=removerReceita" style="display:inline;">
-                            <input type="hidden" name="id" value="<?= safe_str($id) ?>">
-                            <input type="hidden" name="csrf_token" value="<?= safe_str($_SESSION['csrf_token'] ?? '') ?>">
-                        
-                        </form>
+
+                        <a class="btn btn-edit btn-inline" href="index.php?action=criarReceitas&id=<?= safe_str($id) ?>">Editar</a>
+
                     </td>
                 </tr>
             <?php endforeach; ?>

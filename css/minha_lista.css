@@ -2,60 +2,87 @@ body {
      padding-top: 100px; 
 }
 .container {
-    margin: 0 auto 30px auto; 
-    width: 90%;
-    background-color: #fff;
-    padding: 30px;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-    flex:1;
+        max-width: 1200px;
+        margin: 20px auto;
+        padding: 20px;
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        font-family: Arial, sans-serif;
 }
 
 .receitas-table {
         display: flex;
-        flex-wrap: wrap;
-        gap: 30px;
-        justify-content: space-around;
-        margin-top: 20px;
+        flex-direction: column;
+        align-items: center;    
+        gap: 12px;             
+        margin-bottom: 30px;
 }
-.receitas-table-h2 {
-    text-align: center;
-        color: #333;
-        border-bottom: 2px solid #eee;
+.receitas-table-h1 {
+        text-align: center;
+        color: #c9302c;
         padding-bottom: 10px;
 }
+.receitas-table-p {
+        text-align: center;
+        color: #000000;
+        padding-bottom: 10px;
+}
+
 .table-container {
-        max-width: 120px;
-        display: flex;
-        flex-wrap: wrap;
-        gap: 30px;
-        justify-content: space-around;
+        width: 100%;
+        display: block;
         margin-top: 20px;
 }
 .table-stats {
-        flex: 1 1 100%; 
-        min-width: unset;
+        width: 100%;
+        box-sizing: border-box;
 }
 .table-stats table {
-         width: 100%;
-        border-collapse: collapse;
-        margin-top: 15px;
-        display: block; 
-        overflow-x: auto;
-}
-.table-stats table table {
         width: 100%;
         border-collapse: collapse;
         margin-top: 15px;
-        display: block; 
-        overflow-x: auto;
+        display: table; 
 }
 .table-stats th, .table-stats td {
         border: 1px solid #ddd;
         padding: 10px;
         text-align: left;
 }
+.table-stats td { vertical-align: middle; }
+.table-stats td .btn { vertical-align: middle; }
 .table-stats th {
         background-color: #d4d4d4;
         font-weight: bold;
 }
+
+.btn { 
+        padding: 8px 12px; 
+        border-radius: 6px; 
+        color: #fff;
+        text-decoration: none; 
+        display: inline-block; 
+        font-weight: bold;
+}
+
+
+.btn-primary { background-color: #337ab7; }
+
+
+.btn-edit {
+        background-color: #2a1eda; 
+        color: #f8f8f8; 
+        border: 1px solid #ffffff;
+        box-shadow: none;
+}
+.btn-edit:hover {
+        background-color: #0185f8;
+}
+.btn-edit:focus {
+        outline: 2px solid rgba(51,123,183,0.15);
+        outline-offset: 2px;
+}
+.btn-edit::before { content: none; }
+
+
+.btn-inline { display:inline-block; margin-right: 8px; }
